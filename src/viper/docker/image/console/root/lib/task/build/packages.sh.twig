@@ -1,0 +1,10 @@
+#!/bin/bash
+
+function task_build_packages()
+{
+    cd {{ @('packages.path') }}
+
+    {% for step in @('packages.build.steps') -%}
+    {{ step|raw }}
+    {% endfor %}
+}

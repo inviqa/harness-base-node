@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function task_build_client()
+{
+    cd {{ @('app.client.path') }}
+    
+    if [ ! {{ @('app.client.build.when')|raw }} ]; then
+        return 0;
+    fi
+
+    {% for step in @('app.client.build.steps') -%}
+    {{ step|raw }}
+    {% endfor %}
+
+}

@@ -12,7 +12,7 @@ main()
 
     else
         passthru docker-compose up -d
-        passthru docker-compose exec -T -u build node app welcome
+        passthru docker-compose exec -T -u node console app welcome
     fi
 
     if [[ "$APP_BUILD" = "dynamic" && "$USE_MUTAGEN" = "yes" ]]; then
@@ -34,10 +34,8 @@ dynamic()
     passthru docker-compose build --pull
     passthru docker-compose up -d
 
-    if [ ! -f package.json ]; then
-        task "skeleton:apply"
-    fi
-    passthru docker-compose exec -T node app init
+    passthru docker-compose exec -T -u node console app build
+    passthru docker-compose exec -T -u node console app init
 }
 
 static()

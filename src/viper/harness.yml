@@ -8,8 +8,20 @@ harness('inviqa/node-viper'):
       - harness:/
 ---
 attributes:
-  app:
-    dist_path: /app/build
+  node:
+    version: 14
+  gateway:
+    path: /app/gateway
+    build:
+      when: -f package.json
+      steps:
+        - yarn install
+  client:
+    path: /app/client
+    build:
+      when: -f package.json
+      steps:
+        - yarn install
 ---
 import:
   - harness/config/*.yml

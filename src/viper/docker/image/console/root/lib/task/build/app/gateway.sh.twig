@@ -1,0 +1,15 @@
+#!/bin/bash
+
+function task_build_gateway()
+{(
+    cd {{ @('app.gateway.path') }}
+    
+    if [ ! {{ @('app.gateway.build.when')|raw }} ]; then
+        return 0;
+    fi
+
+    {% for step in @('app.gateway.build.steps') -%}
+    {{ step|raw }}
+    {% endfor %}
+
+)}

@@ -1,0 +1,17 @@
+coverage/
+/**/node_modules/
+/**/build/
+/**/static/
+/**/dist/
+/**/backstop_data/
+/**/client/public
+/**/aman-client/public
+tmp/
+/app/gateway/config/classmap.ts
+/app/gateway-contract/src/types.ts
+/lib/graphql-api-contract-*/src/types.ts
+/lib/gateway-service-*/src/types.ts
+/app/gateway/src/Gateway/Service/*/types.ts
+generated.ts
+!.storybook
+.tmp-di*
