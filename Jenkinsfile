@@ -17,7 +17,7 @@ pipeline {
                     }
                 }
                 stages {
-                    stage('Test $FRAMEWORK (mode=static)') {
+                    stage("Test ${FRAMEWORK} (mode=static)") {
                         agent { label "my127ws" }
                         steps { sh './build && ./test $FRAMEWORK static' }
                         post {
@@ -27,7 +27,7 @@ pipeline {
                             }
                         }
                     }
-                    stage('Test $FRAMEWORK (mode=dynamic)') {
+                    stage("Test ${FRAMEWORK} (mode=dynamic)") {
                         agent { label "my127ws" }
                         steps { sh './build && ./test $FRAMEWORK dynamic' }
                         post {
@@ -37,7 +37,7 @@ pipeline {
                             }
                         }
                     }
-                    stage('Test $FRAMEWORK (mode=dynamic, sync=mutagen)') {
+                    stage("Test ${FRAMEWORK} (mode=dynamic, sync=mutagen)") {
                         agent { label "my127ws" }
                         steps { sh './build && ./test $FRAMEWORK dynamic mutagen' }
                         post {
