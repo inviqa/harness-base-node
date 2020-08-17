@@ -3,12 +3,10 @@
 set -e
 set -x
 
-HARNESSES=(spa viper)
+HARNESSES=(node-spa viper)
 
 function main()
 {
-    build_base
-
     for harness in "${HARNESSES[@]}"
     do
         build "$harness"
@@ -34,20 +32,6 @@ function build()
 
     rsync -va "./src/_base/" "$harness_dist_path"
     rsync -va "$harness_src_path" "$harness_dist_path"
-}
-
-function build_base()
-{
-    local harness_dist_path="./dist/harness-node/"
-    local harness_src_path="./src/_base/"
-
-    if [[ -d "$harness_dist_path" ]]; then
-        rm -rf "$harness_dist_path"
-    fi
-
-    mkdir "$harness_dist_path"
-
-    rsync -va "./src/_base/" "$harness_dist_path"
 }
 
 main

@@ -79,23 +79,6 @@ attributes.default:
       node: = 'node:' ~ @('node.version') ~ '-slim'
       nginx: nginx:1.17-alpine
 
-  backend:
-    path: /app
-    build:
-      when: 'true'
-      steps: []
-    start_dev:
-      steps:
-        - passthru yarn install
-        - yarn dev
-  frontend:
-    path: /app
-    build:
-      when: 'true'
-      steps:
-        - passthru yarn install
-        - passthru yarn build
-
   git:
     main_branch: develop
 

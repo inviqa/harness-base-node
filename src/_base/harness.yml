@@ -1,6 +1,6 @@
 ---
-harness('inviqa/node-spa'):
-  description: A docker based development environment for SPA apps built by tools run in node
+harness('inviqa/node'):
+  description: A docker based development environment node based services.
   require:
     services:
       - proxy

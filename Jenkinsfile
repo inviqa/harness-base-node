@@ -13,7 +13,7 @@ pipeline {
                 axes {
                     axis {
                         name 'FRAMEWORK'
-                        values 'node', 'spa', 'viper'
+                        values 'node-spa'
                     }
                 }
                 stages {

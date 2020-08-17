@@ -1,0 +1,55 @@
+---
+harness('inviqa/node-spa'):
+  description: A docker based development environment for SPA apps built by tools run in node
+  require:
+    services:
+      - proxy
+    confd:
+      - harness:/
+---
+attributes:
+
+  app:
+    dist_path: /app/build
+
+  backend:
+    path: /app
+    build:
+      when: 'true'
+      steps: []
+    start_dev:
+      steps:
+        - passthru yarn install
+        - yarn dev
+
+  frontend:
+    path: /app
+    build:
+      when: 'true'
+      steps:
+        - passthru yarn install
+        - passthru yarn build
+
+  services:
+    node:
+      environment:
+        HOST_OS_FAMILY: = @('host.os')
+        APP_NAME: = @('workspace.name')
+        APP_HOST: = @('hostname')
+    nginx:
+      publish: true
+      environment:
+        APP_HOST: = @('hostname')
+
+  pipeline:
+    preview:
+      resources:
+        memory:
+          nginx: "64Mi"
+          node: "1024Mi"
+
+---
+import:
+  - harness/config/*.yml
+  - harness/attributes/*.yml
+  - harness/attributes/environment/={env('MY127WS_ENV','local')}.yml

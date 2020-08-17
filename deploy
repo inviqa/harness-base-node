@@ -16,9 +16,9 @@ function main()
 
     build
 
-    set_remote "base" "git@github.com:inviqa/harness-node.git"
-    splitsh-lite --prefix="src/_base" --target="publish/harness-node"
-    git push -q -f "base" "publish/harness-node:0.1.x"
+    # set_remote "base" "git@github.com:inviqa/harness-node.git"
+    # splitsh-lite --prefix="src/_base" --target="publish/harness-node"
+    # git push -q -f "base" "publish/harness-node:0.1.x"
 
     for harness in "${HARNESSES[@]}"
     do
