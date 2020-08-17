@@ -121,7 +121,7 @@ function teardown()
 (
     cd "${path_test}"
     ws destroy
-    rm -rf .my127ws
+
 )
 
 function clean()
