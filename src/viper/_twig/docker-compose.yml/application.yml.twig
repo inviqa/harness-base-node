@@ -1,0 +1,74 @@
+{% set syncvolume = false %}
+{% if @('host.os') == 'darwin' and @('mutagen') == 'yes' %}
+{% set syncvolume = true %}
+{% endif %}
+
+  gateway:
+    build:
+      context: ./
+      dockerfile: .my127ws/docker/image/gateway/Dockerfile
+{% if @('app.build') == 'dynamic' %}
+    command: ["app", "start:dev"]
+    stdin_open: true # react-scripts start terminates if stdin closed
+    volumes:
+      - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
+      - ./.my127ws/application:/home/gateway/application
+      - ./.my127ws/docker/image/gateway/root/lib/task:/lib/task
+      - ./.my127ws:/.my127ws
+    labels:
+      - traefik.backend={{ @('workspace.name') }}
+      - traefik.frontend.rule=Host:gateway-{{ @('hostname') }}
+      - traefik.docker.network=my127ws
+      - traefik.port={{ @('app.gateway.port')}}
+    networks:
+      private: {}
+      shared: {}
+{% else %}
+    image: {{ @('docker.repository') ~ ':' ~ @('app.version') ~ '-gateway' }}
+    command: [sleep, infinity]
+    expose:
+      - {{ @('app.gateway.port')}}
+    labels:
+      - traefik.enable=false
+    networks:
+      - private
+{% endif %}
+    environment: {{ to_nice_yaml(deep_merge([
+        @('app.gateway.environment'),
+        @('app.gateway.environment_secrets')
+      ]), 2, 6) | raw }}
+
+  client:
+    build:
+      context: ./
+      dockerfile: .my127ws/docker/image/client/Dockerfile
+{% if @('app.build') == 'dynamic' %}
+    command: ["app", "start:dev"]
+    stdin_open: true # react-scripts start terminates if stdin closed
+    volumes:
+      - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
+      - ./.my127ws/application:/home/client/application
+      - ./.my127ws/docker/image/client/root/lib/task:/lib/task
+      - ./.my127ws:/.my127ws
+    labels:
+      - traefik.backend={{ @('workspace.name') }}
+      - traefik.frontend.rule=Host:client-{{ @('hostname') }}
+      - traefik.docker.network=my127ws
+      - traefik.port={{ @('app.client.port')}}
+    networks:
+      private: {}
+      shared: {}
+{% else %}
+    image: {{ @('docker.repository') ~ ':' ~ @('app.version') ~ '-client' }}
+    command: [sleep, infinity]
+    expose:
+      - {{ @('app.client.port')}}
+    labels:
+      - traefik.enable=false
+    networks:
+      - private
+{% endif %}
+    environment: {{ to_nice_yaml(deep_merge([
+        @('app.client.environment'),
+        @('app.client.environment_secrets')
+      ]), 2, 6) | raw }}
