@@ -85,7 +85,7 @@ function run_pipeline_tests()
     local harness="$1"
     cd "${path_test}"
 
-    ws helm kubeval qa
+    ws helm kubeval app
 )
 
 function restart_environment()
