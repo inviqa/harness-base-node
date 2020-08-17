@@ -69,20 +69,6 @@ command('ps'):
     #!bash(workspace:/)|@
     docker-compose ps
 
-command('console'):
-  env:
-    COMPOSE_PROJECT_NAME: = @('namespace')
-  exec: |
-    #!bash(workspace:/)|@
-    passthru docker-compose exec node bash
-
-command('frontend build'):
-  env:
-    COMPOSE_PROJECT_NAME: = @('namespace')
-  exec: |
-    #!bash(workspace:/)|@
-    passthru docker-compose exec -u node node app build:frontend
-
 command('port <service>'):
   env:
     COMPOSE_PROJECT_NAME: = @('namespace')

@@ -7,6 +7,20 @@ harness('inviqa/node-spa'):
     confd:
       - harness:/
 ---
+command('console'):
+  env:
+    COMPOSE_PROJECT_NAME: = @('namespace')
+  exec: |
+    #!bash(workspace:/)|@
+    passthru docker-compose exec node bash
+
+command('frontend build'):
+  env:
+    COMPOSE_PROJECT_NAME: = @('namespace')
+  exec: |
+    #!bash(workspace:/)|@
+    passthru docker-compose exec -u node node app build:frontend
+---
 attributes:
 
   app:
@@ -47,7 +61,6 @@ attributes:
         memory:
           nginx: "64Mi"
           node: "1024Mi"
-
 ---
 import:
   - harness/config/*.yml
