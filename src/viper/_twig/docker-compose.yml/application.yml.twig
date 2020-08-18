@@ -9,7 +9,6 @@
       dockerfile: .my127ws/docker/image/gateway/Dockerfile
 {% if @('app.build') == 'dynamic' %}
     command: ["app", "start:dev"]
-    stdin_open: true # react-scripts start terminates if stdin closed
     volumes:
       - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
       - ./.my127ws/application:/home/gateway/application
@@ -44,7 +43,6 @@
       dockerfile: .my127ws/docker/image/client/Dockerfile
 {% if @('app.build') == 'dynamic' %}
     command: ["app", "start:dev"]
-    stdin_open: true # react-scripts start terminates if stdin closed
     volumes:
       - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
       - ./.my127ws/application:/home/client/application

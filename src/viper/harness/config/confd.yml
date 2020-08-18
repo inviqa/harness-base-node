@@ -2,9 +2,9 @@
 confd('harness:/'):
   # base templates
   - { src: docker/image/client/Dockerfile }
-  - { src: docker/image/client/root/lib/task/build }
+  - { src: docker/image/client/root/lib/task/build.sh }
   - { src: docker/image/gateway/Dockerfile }
-  - { src: docker/image/gateway/root/lib/task/build }
+  - { src: docker/image/gateway/root/lib/task/build.sh }
   - { src: application/overlay/Jenkinsfile }
   - { src: application/overlay/.dockerignore, dst: workspace:/.dockerignore }
   - { src: application/skeleton/README.md }
