@@ -17,10 +17,8 @@ bootstrap()
     setup_app_networking
 }
 
-bootstrap
-
-if [ "${1:-}" == "sleep" ]; then
-    "$@"
+if [ $# -eq 0 ]; then
+    exec supervisord -c /etc/supervisor/supervisord.conf -n
 else
-    exec /sbin/docker-init su -- node -c "$(printf "%q " "${@:1}")"
+    exec "$@"
 fi

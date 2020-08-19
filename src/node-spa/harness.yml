@@ -7,13 +7,6 @@ harness('inviqa/node-spa'):
     confd:
       - harness:/
 ---
-command('console'):
-  env:
-    COMPOSE_PROJECT_NAME: = @('namespace')
-  exec: |
-    #!bash(workspace:/)|@
-    passthru docker-compose exec node bash
-
 command('frontend build'):
   env:
     COMPOSE_PROJECT_NAME: = @('namespace')

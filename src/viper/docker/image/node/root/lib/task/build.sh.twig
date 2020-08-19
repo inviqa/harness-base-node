@@ -8,8 +8,10 @@ function task_build()
 
     task overlay:apply
 
-    {% for step in @('app.gateway.build.steps') -%}
+    {% for step in @('app.build.steps') -%}
     {{ step|raw }}
     {% endfor %}
 
+    task build:gateway
+    task build:client
 }

@@ -7,46 +7,40 @@ harness('inviqa/viper'):
     confd:
       - harness:/
 ---
-command('console (gateway|client)'):
-  env:
-    COMPOSE_PROJECT_NAME: = @('namespace')
-    SERVICE: = input.command(1)
-  exec: |
-    #!bash(workspace:/)|@
-    passthru docker-compose exec ${SERVICE} bash
----
 attributes:
   app:
+    _common:
+      docker:
+        image: node:14-slim
+      build:
+        steps:
+        - run yarn install
+        - run yarn generate:types
+        - run yarn build:core
+        - run yarn build:deps
+      environment:
+        HOST_OS_FAMILY: = @('host.os')
+      environment_secrets: {}
     gateway:
       docker:
-        image: node:14-slim
         port: 4000
-        resources:
-          memory: "512Mi"
+        resources: 512MiB
+      build:
+        steps:
+        - run yarn build:app:gateway
       environment:
         APP_HOST: = 'gateway-' ~ @('hostname')
-      build:
-        steps:
-        - yarn install
-        - yarn generate:types
-        - yarn build:core
-        - yarn build:deps
-        - yarn build:gateway
+        DRUPAL_TOKEN_SECRET: 1234
     client:
       docker:
-        image: node:14-slim
         port: 3000
         resources:
-          memory: "512Mi"
-      environment:
-        APP_HOST: = 'client-' ~ @('hostname')
+          memory: 512MiB
       build:
         steps:
-        - yarn install
-        - yarn generate:types
-        - yarn build:core
-        - yarn build:deps
-        - yarn build:client
+        - run yarn build:app:client
+      environment:
+        APP_HOST: = @('hostname')
 ---
 import:
   - harness/config/*.yml

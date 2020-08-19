@@ -34,11 +34,11 @@ dynamic()
     passthru docker-compose build
     passthru docker-compose up -d
 
-    passthru docker-compose exec -T gateway app build
-    passthru docker-compose exec -T gateway app init
+    passthru docker-compose exec -T -u node gateway app build
+    passthru docker-compose exec -T -u node gateway app init
 
-    passthru docker-compose exec -T client app build
-    passthru docker-compose exec -T client app init
+    passthru docker-compose exec -T -u node client app build
+    passthru docker-compose exec -T -u node client app init
 }
 
 static()
