@@ -10,8 +10,7 @@ main()
         touch .my127ws/.flag-built
     else
         passthru docker-compose up -d
-        passthru docker-compose exec -T -u node gateway app welcome
-        passthru docker-compose exec -T -u node client app welcome
+        passthru docker-compose exec -T -u node node app welcome
     fi
 
     if [[ "$APP_BUILD" = "dynamic" && "$USE_MUTAGEN" = "yes" ]]; then
@@ -34,11 +33,8 @@ dynamic()
     passthru docker-compose build
     passthru docker-compose up -d
 
-    passthru docker-compose exec -T -u node gateway app build
-    passthru docker-compose exec -T -u node gateway app init
-
-    passthru docker-compose exec -T -u node client app build
-    passthru docker-compose exec -T -u node client app init
+    passthru docker-compose exec -T -u node node app build
+    passthru docker-compose exec -T -u node node app init
 }
 
 static()

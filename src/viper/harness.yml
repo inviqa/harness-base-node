@@ -7,6 +7,22 @@ harness('inviqa/viper'):
     confd:
       - harness:/
 ---
+command('gateway rebuild'):
+  env:
+    COMPOSE_PROJECT_NAME: = @('namespace')
+  exec: |
+    #!bash(workspace:/)
+    passthru ws exec app build:gateway
+    ws gateway restart
+command('(gateway|client) <action>'):
+  env:
+    COMPOSE_PROJECT_NAME: = @('namespace')
+    SERVICE: = input.command(1)
+    ACTION: = input.argument('action')
+  exec: |
+    #!bash(workspace:/)
+    passthru docker-compose exec node supervisorctl "${ACTION}" "${SERVICE}"
+---
 attributes:
   app:
     _common:

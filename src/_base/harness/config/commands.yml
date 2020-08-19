@@ -44,6 +44,17 @@ command('networks external'):
       fi
     done
 
+command('yarn %'):
+  env:
+    COMPOSE_PROJECT_NAME: = @('namespace')
+  exec: |
+    #!bash(workspace:/)|=
+    if [ -t 0 ] && [ -t 1 ] ; then
+      docker-compose exec -u node node yarn ={ input.argument('%') }
+    else
+      docker-compose exec -T -u node node yarn ={ input.argument('%') }
+    fi
+
 command('exec %'):
   env:
     COMPOSE_PROJECT_NAME: = @('namespace')
@@ -60,7 +71,7 @@ command('console'):
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
-    passthru docker-compose exec node bash
+    passthru docker-compose exec -u node node bash
 
 command('logs %'):
   env:

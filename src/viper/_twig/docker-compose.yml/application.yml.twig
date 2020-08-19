@@ -16,12 +16,11 @@
     labels:
       - traefik.enable=true
       - traefik.docker.network=my127ws
-      - traefik.gateway.backend={{ 'gateway' ~ @('workspace.name') }}
-      - traefik.gateway.frontend.rule=Host:{{ @('app.gateway.APP_HOST') }}
+      - traefik.gateway.backend={{ 'gateway-' ~ @('workspace.name') }}
+      - traefik.gateway.frontend.rule=Host:{{ @('app.gateway.environment.APP_HOST') }}
       - traefik.gateway.port={{ @('app.gateway.docker.port')}}
-      - traefik.docker.network=my127ws
-      - traefik.client.backend={{ 'client' ~ @('workspace.name') }}
-      - traefik.client.frontend.rule=Host:{{ @('app.client.APP_HOST') }}
+      - traefik.client.backend={{ 'client-' ~ @('workspace.name') }}
+      - traefik.client.frontend.rule=Host:{{ @('app.client.environment.APP_HOST') }}
       - traefik.client.port={{ @('app.client.docker.port')}}
     networks:
       private: {}
