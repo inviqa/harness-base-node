@@ -7,6 +7,7 @@ confd('harness:/'):
   - { src: docker/image/node/root/lib/task/build/client.sh }
   - { src: application/overlay/Jenkinsfile }
   - { src: application/overlay/.dockerignore, dst: workspace:/.dockerignore }
+  - { src: application/overlay/app/client/config/default.js, dst: workspace:/app/client/config/default.js }
   - { src: application/skeleton/README.md }
   - { src: mutagen.yml, dst: workspace:/mutagen.yml }
   - { src: docker-compose.yml, dst: workspace:/docker-compose.yml }

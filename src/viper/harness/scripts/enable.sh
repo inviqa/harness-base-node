@@ -34,6 +34,10 @@ dynamic()
     passthru docker-compose up -d
 
     passthru docker-compose exec -T -u node node app build
+
+    run ws gateway restart
+    run ws client restart
+
     passthru docker-compose exec -T -u node node app init
 }
 
@@ -41,6 +45,7 @@ static()
 {
     ws app build
     passthru docker-compose up -d
+    passthru docker-compose exec -T -u node node app init
 }
 
 main
