@@ -1,0 +1,10 @@
+workspace('ci-node-spa-sample-static'):
+  description: generated local workspace for ci-node-spa-sample.
+  harness: inviqa/node-spa
+
+attribute('app.build'): static
+
+attribute('aws.bucket'): null
+attribute('app.repository'): null
+attribute('aws.id'): null
+attribute('aws.key'): null
