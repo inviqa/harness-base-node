@@ -1,9 +1,9 @@
 
 command('enable'):
   env:
-    USE_MUTAGEN:          = @('host.os') == 'darwin' and @('mutagen') == 'yes' ? 'yes':'no'
-    APP_BUILD:            = @('app.build')
-    APP_MODE:             = @('app.mode')
+    SYNC_STRATEGY:        = @('docker-compose.sync.strategy')
+    APP_DEVELOPMENT:      = @('app.development')
+    APP_DYNAMIC:          = @('app.dynamic')
     NAMESPACE:            = @('namespace')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
@@ -12,8 +12,7 @@ command('enable'):
 
 command('disable'):
   env:
-    USE_DOCKER_SYNC:      = (@('host.os') == 'darwin' and @('docker-sync') == 'yes') ? 'yes':'no'
-    USE_MUTAGEN:          = @('host.os') == 'darwin' and @('mutagen') == 'yes' ? 'yes':'no'
+    SYNC_STRATEGY:        = @('docker-compose.sync.strategy')
     NAMESPACE:            = @('namespace')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
@@ -23,11 +22,11 @@ command('disable'):
 command('destroy'):
   env:
     NAMESPACE:            = @('namespace')
-    APP_BUILD:            = @('app.build')
+    APP_DEVELOPMENT:      = @('app.development')
+    APP_DYNAMIC:          = @('app.dynamic')
     APP_VERSION:          = @('app.version')
     DOCKER_REPOSITORY:    = @('docker.repository')
-    USE_DOCKER_SYNC:      = (@('host.os') == 'darwin' and @('docker-sync') == 'yes') ? 'yes':'no'
-    USE_MUTAGEN:          = @('host.os') == 'darwin' and @('mutagen') == 'yes' ? 'yes':'no'
+    SYNC_STRATEGY:        = @('docker-compose.sync.strategy')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@

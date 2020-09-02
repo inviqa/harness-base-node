@@ -15,10 +15,10 @@ spec:
   template:
     type: kubernetes.io/dockerconfigjson
   encryptedData:
-    .dockerconfigjson: {{ .Values.docker.image_pull_config }}
+    .dockerconfigjson: {{ .Values.helm.image_pull_config }}
 {{ else }}
 type: kubernetes.io/dockerconfigjson
 data:
-  .dockerconfigjson: {{ .Values.docker.image_pull_config }}
+  .dockerconfigjson: {{ .Values.helm.image_pull_config }}
 {{ end }}
 {{ end }}

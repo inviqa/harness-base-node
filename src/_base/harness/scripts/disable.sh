@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[ "$USE_MUTAGEN" = "yes" ]]; then
+if [[ "$SYNC_STRATEGY" = "mutagen" ]]; then
     run ws mutagen pause
 fi
 

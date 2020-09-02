@@ -1,4 +1,5 @@
 attributes:
   app:
-    build: dynamic
+    dynamic: yes
+    development: yes
     version: develop
