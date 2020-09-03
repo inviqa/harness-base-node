@@ -4,24 +4,20 @@ attributes.default:
   
   hostname: = @('namespace') ~ '.' ~ @('domain')
 
-  app:
-    services: []
-    image: node:14-slim
-    build:
-      steps:
-      - run yarn install
+  node:
+    version: 14
 
   docker-compose:
     file_version: '3'
     sync:
-      strategy: = @('host.os') == 'darwin' && @('app.dynamic') == 'yes' ? 'mutagen':'native'
+      strategy: = @('host.os') == 'darwin' ? 'mutagen':'native'
       native:
         options: cached
       mutagen: ~
 
-  jenkins:
-    credentials:
-      my127ws_key: = @('workspace.name') ~ '-my127ws-key'
+  pipeline:
+    secrets:
+      MY127WS_KEY: = @('workspace.name') ~ '-my127ws-key'
     stage:
       publish:
         enabled: no
@@ -36,10 +32,10 @@ attributes.default:
 
   docker:
     registry:
-      url: = get_docker_registry(@('docker.repository'))
-      username: = @('docker.username')
-      password: = @('docker.password')
-    repository: = @("workspace.name")
+      url: ~
+      username: ~
+      password: ~
+    repository: ~
 
   git:
     main_branch: develop

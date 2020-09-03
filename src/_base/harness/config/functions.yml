@@ -142,14 +142,6 @@ function('get_docker_external_networks'): |
   }
   = join(" ", $externalNetworks);
 
-function('get_docker_registry', [dockerRepository]): |
-  #!php
-  $dockerRepoParts = explode('/', $dockerRepository);
-  if (strpos($dockerRepoParts[0], '.') !== false) {
-      $registry = $dockerRepoParts[0];
-  }
-  = $registry ?? 'https://index.docker.io/v1/';
-
 function('docker_config', [registryConfig]): |
   #!php
   $config = [
@@ -174,17 +166,4 @@ function('slugify', [text]): |
   $text = trim($text, '-');
   $text = preg_replace('~-+~', '-', $text);
   $text = strtolower($text);
-  = $text;
-
-function('php_fpm_exporter_scrape_url', [hostname, pools]): |
-  #!php
-  $text = join(
-      ',',
-      array_map(
-        function ($pool) use ($hostname) {
-          return 'tcp://' . $hostname .':' . $pool['port'] . '/status';
-        },
-        $pools
-      )
-    );
   = $text;
