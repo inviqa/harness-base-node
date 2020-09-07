@@ -1,10 +1,2 @@
-{% if @('pipeline.preview.services') %}
-services: {{ to_nice_yaml(@('pipeline.preview.services'), 2, 2) | raw }}  
-{% endif %}
-{% if @('pipeline.preview.persistence') %}
-persistence: {{ to_nice_yaml(@('pipeline.preview.persistence'), 2, 2) | raw }}
-{% endif %}
 
-{% if @('pipeline.preview.resources') %}
-resources: {{ to_nice_yaml(@('pipeline.preview.resources'), 2, 2) | raw }}
-{% endif %}
+app: {{ to_nice_yaml(@('environment.preview'), 2, 2) | raw }}  
