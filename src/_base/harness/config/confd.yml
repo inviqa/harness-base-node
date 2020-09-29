@@ -6,7 +6,6 @@ confd('harness:/'):
   - { src: docker/image/node/root/lib/task/build/backend.sh }
   - { src: docker/image/node/root/lib/task/start/dev.sh }
   - { src: docker/image/node/Dockerfile }
-  - { src: docker/image/nginx/Dockerfile }
   - { src: application/overlay/Jenkinsfile }
   - { src: application/overlay/.dockerignore, dst: workspace:/.dockerignore }
   - { src: application/skeleton/README.md }

@@ -5,7 +5,6 @@ command('app build'):
     #!bash(workspace:/)|@
     ws external-images pull
     passthru docker-compose build node
-    passthru docker-compose build nginx # nginx needs dist built from node
 
 command('app publish'):
   env:
