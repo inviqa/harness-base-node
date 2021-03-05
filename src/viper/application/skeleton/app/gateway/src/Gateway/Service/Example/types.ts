@@ -1,8 +1,6 @@
 import { GraphQLResolveInfo } from 'graphql';
 export type Maybe<T> = T | null;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -17,16 +15,40 @@ export type Scalars = {
 
 
 
+export type Route = {
+  __typename?: 'Route';
+  resourceId: Scalars['String'];
+  resourceType: Scalars['String'];
+  cmsExampleContent?: Maybe<CmsExampleContent>;
+};
+
 export type Query = {
   __typename?: 'Query';
-  helloWorld: Scalars['String'];
+  cmsExampleContent?: Maybe<CmsExampleContent>;
 };
+
+export type CmsExampleContent = {
+  __typename?: 'CmsExampleContent';
+  body?: Maybe<Scalars['String']>;
+};
+
 
 
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
+export type ReferenceResolver<TResult, TReference, TContext> = (
+      reference: TReference,
+      context: TContext,
+      info: GraphQLResolveInfo
+    ) => Promise<TResult> | TResult;
+
+      type ScalarCheck<T, S> = S extends true ? T : NullableCheck<T, S>;
+      type NullableCheck<T, S> = Maybe<T> extends T ? Maybe<ListCheck<NonNullable<T>, S>> : ListCheck<T, S>;
+      type ListCheck<T, S> = T extends (infer U)[] ? NullableCheck<U, S>[] : GraphQLRecursivePick<T, S>;
+      export type GraphQLRecursivePick<T, S> = { [K in keyof T & keyof S]: ScalarCheck<T[K], S[K]> };
+    
 export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> = ResolverFn<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
@@ -74,7 +96,7 @@ export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
   info: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
+export type IsTypeOfResolverFn<T = {}> = (obj: T, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
 
@@ -88,24 +110,43 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Query: ResolverTypeWrapper<{}>;
+  Route: ResolverTypeWrapper<Route>;
   String: ResolverTypeWrapper<Scalars['String']>;
+  Query: ResolverTypeWrapper<{}>;
+  CmsExampleContent: ResolverTypeWrapper<CmsExampleContent>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Query: {};
+  Route: Route;
   String: Scalars['String'];
+  Query: {};
+  CmsExampleContent: CmsExampleContent;
   Boolean: Scalars['Boolean'];
 };
 
+export type RouteResolvers<ContextType = any, ParentType extends ResolversParentTypes['Route'] = ResolversParentTypes['Route']> = {
+  __resolveReference?: ReferenceResolver<Maybe<ResolversTypes['Route']>, { __typename: 'Route' } & GraphQLRecursivePick<ParentType, {"resourceId":true,"resourceType":true}>, ContextType>;
+
+
+  cmsExampleContent?: Resolver<Maybe<ResolversTypes['CmsExampleContent']>, { __typename: 'Route' } & GraphQLRecursivePick<ParentType, {"resourceId":true,"resourceType":true}>, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  helloWorld?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  cmsExampleContent?: Resolver<Maybe<ResolversTypes['CmsExampleContent']>, ParentType, ContextType>;
+};
+
+export type CmsExampleContentResolvers<ContextType = any, ParentType extends ResolversParentTypes['CmsExampleContent'] = ResolversParentTypes['CmsExampleContent']> = {
+  body?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Route?: RouteResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  CmsExampleContent?: CmsExampleContentResolvers<ContextType>;
 };
 
 

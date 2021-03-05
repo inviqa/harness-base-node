@@ -1,13 +1,9 @@
-parameters:
-  helloworld:
-    path: /_internal/hello-world
-
 services:
   HelloWorldService:
     class: /HelloWorld/HelloWorldService
     arguments:
-      - '%helloworld.path%'
-      - './src/HelloWorld/typedef/hello-world.graphql'
+      - '%services.hello-world.path%'
+      - '%services.hello-world.schema%'
       - '@HelloWorldResolverProvider'
       - '@HelloWorldDataSource'
       - '@GatewayServiceRunner'
