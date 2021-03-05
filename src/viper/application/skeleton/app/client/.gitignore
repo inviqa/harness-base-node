@@ -3,6 +3,9 @@
 # next.js
 /.next/
 
+# storybook
+storybook-static
+
 # service worker stuff
 public/workbox-*.js*
 public/sw.js*
