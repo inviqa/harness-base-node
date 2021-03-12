@@ -4,9 +4,9 @@ stopasgroup=true
 killasgroup=true
 stopsignal=TERM
 {% if @('app.dynamic') == 'yes' %}
-command=yarn dev
+command=yarn workspace @inviqa/viper-app-client dev
 {% else %}
-command=yarn start
+command=yarn workspace @inviqa/viper-app-client start
 {% endif %}
 user=node
 environment=HOME="/home/node",USER="node"
