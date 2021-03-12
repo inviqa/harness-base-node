@@ -1,5 +1,8 @@
 [program:client]
-directory=/app/app/client
+directory=/app
+stopasgroup=true
+killasgroup=true
+stopsignal=TERM
 {% if @('app.dynamic') == 'yes' %}
 command=yarn dev
 {% else %}
