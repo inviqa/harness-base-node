@@ -10,6 +10,7 @@ harness('inviqa/node'):
 attributes:
   app:
     dist_path: /app/build
+    node_web_port: 80
 ---
 import:
   - harness/config/*.yml
