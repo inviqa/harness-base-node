@@ -1,0 +1,162 @@
+attributes:
+  services:
+    console:
+      enabled: true
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-console'
+      publish: true
+      build:
+        environment: {}
+      environment:
+        DB_ADMIN_USER: root
+        HAS_ELASTICSEARCH: "= @('services.elasticsearch.enabled') ? 'true' : 'false'"
+        HAS_VARNISH: "= @('services.varnish.enabled') ? 'true' : 'false'"
+      environment_secrets:
+        DB_ADMIN_PASS: = @('database.root_pass')
+      resources:
+        memory: "2048Mi"
+        init_memory: "1024Mi"
+        migrate_memory: "1024Mi"
+    cron:
+      enabled: "= 'cron' in @('app.services')"
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-cron'
+      publish: "= @('services.cron.enabled')"
+      resources:
+        memory: "1024Mi"
+    elasticsearch:
+      enabled: "= 'elasticsearch' in @('app.services')"
+      image: = @('elasticsearch.image') ~ ':' ~ @('elasticsearch.tag')
+      resources:
+        memory: "1024Mi"
+    lighthouse:
+      enabled: true
+    memcached:
+      enabled: "= 'memcached' in @('app.services')"
+      image: memcached:1-alpine
+    mongodb:
+      image: mongo:4.4
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: admin
+      environment_secrets:
+        MONGO_INITDB_ROOT_PASSWORD: password
+      resources:
+        memory: "512Mi"
+    mysql:
+      enabled: "= 'mysql' in @('app.services')"
+      image: = @('mysql.image') ~ ':' ~ @('mysql.tag')
+      options: = @('database.var')
+      environment:
+        MYSQL_DATABASE: = @('database.name')
+        MYSQL_USER: = @('database.user')
+      environment_secrets:
+        MYSQL_PASSWORD: = @('database.pass')
+        MYSQL_ROOT_PASSWORD: = @('database.root_pass')
+      resources:
+        memory: "512Mi"
+    postgres:
+      enabled: "= 'postgres' in @('app.services')"
+      image: postgres:9.6
+      environment:
+        POSTGRES_DB: = @('database.name')
+        POSTGRES_USER: = @('database.user')
+        PGDATA: /var/lib/postgresql/data/pgdata
+      environment_secrets:
+        POSTGRES_PASSWORD: = @('database.pass')
+      resources:
+        memory: "512Mi"
+    rabbitmq:
+      enabled: "= 'rabbitmq' in @('app.services')"
+      image: = @('rabbitmq.image') ~ ':' ~ @('rabbitmq.tag')
+      environment:
+        RABBITMQ_DEFAULT_USER: = @('rabbitmq.user')
+        RABBITMQ_DEFAULT_VHOST: = @('rabbitmq.vhosts.default')
+      environment_secrets:
+        RABBITMQ_DEFAULT_PASS: = @('rabbitmq.password')
+        RABBITMQ_ERLANG_COOKIE: = @('rabbitmq.erlang_cookie')
+      resources:
+        memory: "1024Mi"
+    redis:
+      enabled: "= 'redis' in @('app.services')"
+      image: redis:5-alpine
+      resources:
+        memory: "256Mi"
+    redis-session:
+      enabled: "= 'redis-session' in @('app.services')"
+      image: redis:5-alpine
+      resources:
+        memory: "1024Mi"
+    relay:
+      enabled: true
+      publish: false
+    solr:
+      enabled: "= 'solr' in @('app.services')"
+      config_path: ""
+      environment:
+        SOLR_CORE_NAME: collection1
+      environment_secrets: {}
+      host: solr
+      image: = 'solr:' ~ @('services.solr.major_version') ~ '-slim'
+      major_version: 8
+      port: 8983
+  pipeline:
+    base:
+      prometheus:
+        podMonitoring: false
+      services:
+        mysql:
+          options: = @('services.mysql.options')
+        console:
+          environment:
+            TIDEWAYS_ENABLED: "= @('php.ext-tideways.cli.enable') ? '{{ .Values.services.tideways.enabled }}' : 'false'"
+        relay:
+          enabled: false
+      ingress:
+        annotations: {}
+        target_service: "= @('services.varnish.enabled') ? 'varnish' : 'webapp'"
+        # standard or istio
+        type: standard
+      istio:
+        gateways:
+          - "istio-system/{{ .Release.Namespace }}-gateway"
+        additionalGateways: []
+    production:
+      # assumption is that in a production style environment these would be
+      # managed services outside of the applications control
+      services:
+        elasticsearch:
+          enabled: false
+        memcached:
+          enabled: false
+        mysql:
+          enabled: false
+        postgres:
+          enabled: false
+        redis:
+          enabled: false
+        redis-session:
+          enabled: false
+    qa:
+      services:
+    preview:
+      services:
+        console:
+          enabled: false
+          resources:
+            memory: "1024Mi"
+        cron:
+          resources:
+            memory: "1024Mi"
+        elasticsearch:
+          resources:
+            memory: "1024Mi"
+        mysql:
+          resources:
+            memory: "512Mi"
+        postgres:
+          resources:
+            memory: "512Mi"
+        redis:
+          resources:
+            memory: "64Mi"
+        redis-session:
+          resources:
+            memory: "64Mi"
