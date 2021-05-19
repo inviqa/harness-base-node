@@ -1,2 +1,3 @@
 feature: {{ to_nice_yaml(@('helm.feature'), 2, 2) | raw }}
 image_pull_config: {{ @('docker.image_pull_config') | raw }}
+prometheus: {{ to_nice_yaml(@('pipeline.base.prometheus'), 2, 2) | raw }}
