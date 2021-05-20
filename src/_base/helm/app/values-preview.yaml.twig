@@ -1,2 +1,3 @@
 
-app: {{ to_nice_yaml(@('environment.preview'), 2, 2) | raw }}  
+app: {{ to_nice_yaml(@('environment.preview'), 2, 2) | raw }}
+image_pull_config: {{ @('docker.image_pull_config') | raw }}

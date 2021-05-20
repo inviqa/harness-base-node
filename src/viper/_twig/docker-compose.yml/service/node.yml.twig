@@ -1,3 +1,9 @@
+{% set syncvolume = false %}
+{% if @('host.os') == 'darwin' and @('mutagen') == 'yes' %}
+{% set syncvolume = true %}
+{% endif %}
+{% set hostnames = [@('hostname')] %}
+{% set hostnames = hostnames|merge(@('hostname_aliases')|map(alias => "#{alias}." ~ @('domain'))) %}
 
   node:
     build:
@@ -14,7 +20,7 @@
       - ./.my127ws/docker/image/node/root/lib/task:/lib/task
       - ./.my127ws:/.my127ws
 {% else %}
-    image: {{ @('docker.repository') ~ @('app.version') }}
+    image: {{ @('app.image') }}
 {% endif %}
     labels:
       - traefik.enable=true
