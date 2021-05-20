@@ -1,117 +1,46 @@
 attributes:
   services:
-    console:
-      enabled: true
-      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-console'
-      publish: true
-      build:
-        environment: {}
+    node-base:
       environment:
-        DB_ADMIN_USER: root
-        HAS_ELASTICSEARCH: "= @('services.elasticsearch.enabled') ? 'true' : 'false'"
-        HAS_VARNISH: "= @('services.varnish.enabled') ? 'true' : 'false'"
-      environment_secrets:
-        DB_ADMIN_PASS: = @('database.root_pass')
-      resources:
-        memory: "2048Mi"
-        init_memory: "1024Mi"
-        migrate_memory: "1024Mi"
-    cron:
-      enabled: "= 'cron' in @('app.services')"
-      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-cron'
-      publish: "= @('services.cron.enabled')"
-      resources:
-        memory: "1024Mi"
-    elasticsearch:
-      enabled: "= 'elasticsearch' in @('app.services')"
-      image: = @('elasticsearch.image') ~ ':' ~ @('elasticsearch.tag')
-      resources:
-        memory: "1024Mi"
-    lighthouse:
-      enabled: true
-    memcached:
-      enabled: "= 'memcached' in @('app.services')"
-      image: memcached:1-alpine
-    mongodb:
-      image: mongo:4.4
-      environment:
-        MONGO_INITDB_ROOT_USERNAME: admin
-      environment_secrets:
-        MONGO_INITDB_ROOT_PASSWORD: password
-      resources:
-        memory: "512Mi"
-    mysql:
-      enabled: "= 'mysql' in @('app.services')"
-      image: = @('mysql.image') ~ ':' ~ @('mysql.tag')
-      options: = @('database.var')
-      environment:
-        MYSQL_DATABASE: = @('database.name')
-        MYSQL_USER: = @('database.user')
-      environment_secrets:
-        MYSQL_PASSWORD: = @('database.pass')
-        MYSQL_ROOT_PASSWORD: = @('database.root_pass')
-      resources:
-        memory: "512Mi"
-    postgres:
-      enabled: "= 'postgres' in @('app.services')"
-      image: postgres:9.6
-      environment:
-        POSTGRES_DB: = @('database.name')
-        POSTGRES_USER: = @('database.user')
-        PGDATA: /var/lib/postgresql/data/pgdata
-      environment_secrets:
-        POSTGRES_PASSWORD: = @('database.pass')
-      resources:
-        memory: "512Mi"
-    rabbitmq:
-      enabled: "= 'rabbitmq' in @('app.services')"
-      image: = @('rabbitmq.image') ~ ':' ~ @('rabbitmq.tag')
-      environment:
-        RABBITMQ_DEFAULT_USER: = @('rabbitmq.user')
-        RABBITMQ_DEFAULT_VHOST: = @('rabbitmq.vhosts.default')
-      environment_secrets:
-        RABBITMQ_DEFAULT_PASS: = @('rabbitmq.password')
-        RABBITMQ_ERLANG_COOKIE: = @('rabbitmq.erlang_cookie')
-      resources:
-        memory: "1024Mi"
-    redis:
-      enabled: "= 'redis' in @('app.services')"
-      image: redis:5-alpine
-      resources:
-        memory: "256Mi"
-    redis-session:
-      enabled: "= 'redis-session' in @('app.services')"
-      image: redis:5-alpine
-      resources:
-        memory: "1024Mi"
-    relay:
-      enabled: true
-      publish: false
-    solr:
-      enabled: "= 'solr' in @('app.services')"
-      config_path: ""
-      environment:
-        SOLR_CORE_NAME: collection1
-      environment_secrets: {}
-      host: solr
-      image: = 'solr:' ~ @('services.solr.major_version') ~ '-slim'
-      major_version: 8
-      port: 8983
+        HOST_OS_FAMILY: = @('host.os')
+        APP_NAME: = @('workspace.name')
+        APP_HOST: = @('hostname')
+        DB_PLATFORM: = @('database.platform')
+        DB_PLATFORM_VERSION: = @('database.platform_version')
+        DB_HOST: = @('database.host')
+        DB_PORT: = @('database.port')
+        DB_USER: = @('database.user')
+        DB_NAME: = @('database.name')
+        ELASTICSEARCH_HOST: = @('elasticsearch.host')
+        ELASTICSEARCH_PORT: = @('elasticsearch.port')
+        RABBITMQ_API_PORT: = @('rabbitmq.api_port')
+        RABBITMQ_EXTERNAL_HOST: = @('rabbitmq.external_host')
+        RABBITMQ_HOST: = @('rabbitmq.host')
+        RABBITMQ_PORT: = @('rabbitmq.port')
+        RABBITMQ_USER: = @('rabbitmq.user')
+        RABBITMQ_VHOST: = @('rabbitmq.vhosts.default')
+        REDIS_HOST: = @('redis.host')
+        REDIS_PORT: = @('redis.port')
+        REDIS_SESSION_HOST: = @('redis-session.host')
+        REDIS_SESSION_PORT: = @('redis-session.port')
+        SOLR_HOST: = @('services.solr.host')
+        SOLR_PORT: = @('services.solr.port')
+        SMTP_HOST: = @('smtp.host')
+        SMTP_PORT: = @('smtp.port')
+        PHP_IDE_CONFIG: "serverName=workspace"
+        TIDEWAYS_HOST: tideways
+        VARNISH_HOSTNAME_TEMPLATE: "varnish-%d.varnish-headless"
   pipeline:
     base:
       prometheus:
         podMonitoring: false
       services:
-        mysql:
-          options: = @('services.mysql.options')
-        console:
+        node-base:
           environment:
-            TIDEWAYS_ENABLED: "= @('php.ext-tideways.cli.enable') ? '{{ .Values.services.tideways.enabled }}' : 'false'"
-        relay:
-          enabled: false
+            APP_HOST: = @('pipeline.base.hostname')
       ingress:
         annotations: {}
-        target_service: "= @('services.varnish.enabled') ? 'varnish' : 'webapp'"
+        target_service: "= @('services.nginx.enabled') ? 'nginx' : 'node'"
         # standard or istio
         type: standard
       istio:
@@ -122,41 +51,19 @@ attributes:
       # assumption is that in a production style environment these would be
       # managed services outside of the applications control
       services:
-        elasticsearch:
-          enabled: false
-        memcached:
-          enabled: false
-        mysql:
-          enabled: false
-        postgres:
-          enabled: false
-        redis:
-          enabled: false
-        redis-session:
-          enabled: false
     qa:
       services:
+        node-base:
+          environment:
+            APP_HOST: = @('pipeline.qa.hostname')
+            SMTP_HOST: = @('pipeline.qa.smtp.host')
+            SMTP_PORT: = @('pipeline.qa.smtp.port')
     preview:
       services:
-        console:
-          enabled: false
-          resources:
-            memory: "1024Mi"
-        cron:
-          resources:
-            memory: "1024Mi"
-        elasticsearch:
-          resources:
-            memory: "1024Mi"
-        mysql:
-          resources:
-            memory: "512Mi"
-        postgres:
-          resources:
-            memory: "512Mi"
-        redis:
+        nginx:
           resources:
             memory: "64Mi"
-        redis-session:
-          resources:
-            memory: "64Mi"
+        node-base:
+          environment:
+            SMTP_HOST: = @('pipeline.preview.smtp.host')
+            SMTP_PORT: = @('pipeline.preview.smtp.port')
