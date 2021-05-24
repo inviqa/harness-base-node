@@ -17,9 +17,9 @@ Please follow the below steps to get started, if you encounter any issues instal
 ##### Docker
 
 - A working Docker setup
-  - On MacOS, use [Docker for Mac](https://docs.docker.com/docker-for-mac/install/).
-  - On Linux, add the official Docker repository and install the "docker-ce" package.
-    You will also need to have a recent [docker-compose](https://docs.docker.com/compose/install/) version - at least `1.24.0`.
+  - On macOS, use [Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/).
+  - On Linux, add the official Docker repository described under the "Server" section on [Install Docker Engine](https://docs.docker.com/engine/install/) and install the "docker-ce" package.
+    You will also need to have a recent [docker-compose](https://docs.docker.com/compose/install/) version - at least `1.26.0`.
 
 #### Setup
 
@@ -27,8 +27,13 @@ Please follow the below steps to get started, if you encounter any issues instal
 2. Copy the LastPass entry "{{ @('workspace.name') }}: Development Environment Key" to a new blank file named `workspace.override.yml` in the project root.
 3. Run `ws install`
 
-Once installed, the site should be available at [https://{{ @('hostname') }}](https://{{ @('hostname') }}).
+{% include blocks ~ 'websites.md.twig' %}
 
+**Additional services**:
+
+{% if @('services.jenkins.enabled') -%}
+- Jenkins: [https://{{ @('jenkins.external_host') }}](https://{{ @('jenkins.external_host') }})
+{% endif %}
 ### Development environment cleanup
 
 To stop the development environment, run `ws disable`.
@@ -39,40 +44,73 @@ To remove the development environment, run `ws destroy`.
 
 ### Frontend
 
-`ws install` will build and start docker containers. It's optional if you are able
-to run the node development server on your computer directly.
+The frontend build should be automatically done as part of bringing up the environment.
 
-For development mode it's expected that `yarn dev` starts up a development
-node server that serves static assets
+To trigger a rebuild, run `ws frontend build`.
 
 For pipeline and production modes, it's expected that `yarn build` will build
 distribution artifacts in the ./build directory. This will then be copied into
 an nginx image to serve the assets staticly.
 
+To watch for changes, run `ws frontend watch`.
+
+To gain access to the `console` container where the builds happen: `ws frontend console`.
+
+### Harness Version Updates
+
+If you have been notified that a harness version upgrade is available by your team, do the following.
+
+If you have an existing environment running:
+```bash
+ws harness update existing
+```
+
+or if you don't have one running right now or would like to set up from fresh:
+```bash
+ws harness update fresh
+```
+
+{% for readme_block in @('framework.readme_blocks') %}
+{% include blocks ~ readme_block ~ '.md.twig' %}
+{% endfor %}
+
+{% if @('services.mysql.enabled') -%}
+
 ### Performance on MacOS
 
-For optimal performance without using a synchronize mount, Yarn v2 can be used to minimize
-the number of files being watched and/or synchronized.
+Page load times with Docker Desktop for Mac can vary considerably due to the sharing of files from the macOS disk to the small
+virtual machine that docker is running inside.
+This is especially so when there is a large quantity of small files, such as with a large composer node_modules or
+vendor folder.
 
-Page load times with Docker for Mac can vary considerably. This is especially so when there is a large
-quantity of small files, such as with a large composer vendor folder.
+[Mutagen](https://mutagen.io/documentation/transports/docker) is a tool to synchronise files between host machine and
+docker containers.
+It enables production-like performance at the cost of having to synchronise files with an intermediate
+"data" container.
 
-[Mutagen](https://mutagen.io/documentation/transports/docker) is a tool to synchronize files between host machine
-and docker containers, just like docker-sync. We have integrated mutagen for synchronizing files as an option of docker-sync.
 {% if @('mutagen') == 'yes' %}
-This tool is still in beta phase but we have enabled it instead of docker-sync on this project. You can switch to
-docker-sync if you are not happy with mutagen.
-{% endif %}
-Following are some useful commands regarding Mutagen.
+Mutagen is enabled on the development environment.
+{% else %}
+If it takes over 2 seconds to load a page, you should consider enabling mutagen by adding the following
+to `workspace.override.yml` in the project root, or after testing it and the whole team would like to use it,
+`workspace.yml` in the project root:
 
+```yaml
+attribute('mutagen'): 'yes'
+```
+
+Then running `ws harness prepare && ws disable && ws enable`.
+The initial sync can take between 5 to 15 minutes, depending on the size of the project directory.
+
+If committing the attribute changes to `workspace.yml`, ensure the `Performance on macOS` section from
+`.my127ws/application/skeleton/README.md` is copied to the project's README.md too!
+{% endif %}
+
+The following are some useful commands regarding Mutagen:
 ```bash
-# To switch to Mutagen file sync
-ws switch mutagen
-# To switch back to cached volumes
-ws switch cached-volumes
 # To check the Mutagen sync status (sync is ready when status is "Watching for changes")
 mutagen monitor
-# To debug an errored sync
+# To debug a sync error
 mutagen list
 ```
 
@@ -80,18 +118,14 @@ mutagen list
 
 As setup issues are encountered please detail with step by step fix instructions, and where possible update the project or the upstream workspace harness itself to provide a more permanent fix.
 
+* If you get a error that the TLS certificate has expired for the development website in your browser:
+  * Restart the my127 global traefik proxy with `ws global service proxy restart`.
+    This will fetch new TLS certificates for `*.my127.site`.
+* If you use mutagen and operations such as `mutagen project pause` during `ws disable` are hanging:
+  * Head to Docker Desktop Preferences via the system tray icon
+  * Turn off "Enable cloud experience" under the Command Line area of Preferences
+  * Click the "Apply and restart" button
+
 # License
 
 Copyright 2020, Inviqa
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.

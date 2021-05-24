@@ -22,8 +22,7 @@ function test()
 
     # Test default mode of static or dynamic harnesses
     # For dynamic this means a mountpoint for the application code
-    # or mutagen, or docker-sync
-
+    # or mutagen
     setup "$harness" "$mode"
     if [[ "$sync" == "" ]]; then
       setup_dynamic_mountpoint
@@ -36,7 +35,9 @@ function test()
     run_pipeline_tests "$harness"
     restart_environment
     check_environment_started "$harness" "$mode"
-
+    if [[ "$sync" != "" ]]; then
+      wait_for_vendor_directory
+    fi
     teardown
 )
 
@@ -73,7 +74,7 @@ function check_environment_started()
       project="$(git log -n 1 --pretty=format:'%H')"
     fi
 
-    if [ "$(docker-compose -p "$project" ps | grep -c Exit)" -gt 0 ]; then
+    if [ "$(docker-compose -p "$project" ps | grep -v "lighthouse" | grep -c Exit)" -gt 0 ]; then
       echo 'Some containers failed to start'
       docker-compose -p "$project" ps
       return 1
@@ -101,33 +102,45 @@ function setup_dynamic_mountpoint()
     echo "attribute('host.os'): linux" > workspace.override.yml
 )
 
-function setup_dynamic_docker_sync()
-(
-    cd "${path_test}"
-    echo "attribute('host.os'): darwin" > workspace.override.yml
-    echo "attribute('docker-sync'): yes" >> workspace.override.yml
-    echo "attribute('mutagen'): no" >> workspace.override.yml
-)
-
 function setup_dynamic_mutagen()
 (
     cd "${path_test}"
     echo "attribute('host.os'): darwin" > workspace.override.yml
-    echo "attribute('docker-sync'): no" >> workspace.override.yml
     echo "attribute('mutagen'): yes" >> workspace.override.yml
+)
+
+function wait_for_vendor_directory()
+(
+    set +x
+    cd "${path_test}"
+    if [ ! -f composer.json ]; then
+        return 0
+    fi
+    local timer=600
+    while [ $timer -gt 0 ]; do
+      if [ -d vendor ]; then
+          echo "Found vendor directory, sync worked"
+          return 0
+      fi
+      timer=$(( timer - 1 ))
+      sleep 1
+    done
+    echo "vendor directory not found within 600 seconds, sync failed"
+    ls -la
+    return 1
 )
 
 function teardown()
 (
     cd "${path_test}"
-    ws destroy
+    ws destroy || (docker ps -a && return 1)
     rm -rf .my127ws
 )
 
 function clean()
 {
     if [ -d "$path_test" ]; then
-        (cd "$path_test" && ws destroy)
+        (cd "$path_test" && ws destroy) || (docker ps -a && return 1)
         rm -rf "$path_test"
     fi
 }

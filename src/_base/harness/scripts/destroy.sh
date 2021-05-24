@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 
-run docker-compose down --rmi local --volumes --remove-orphans
+if [ "${DESTROY_ALL}" = yes ]; then
+  RMI=all
+else
+  RMI=local
+fi
 
-if [[ "$SYNC_STRATEGY" = "mutagen" ]]; then
+run docker-compose down --rmi "${RMI}" --volumes --remove-orphans --timeout 120
+
+if [ "${USE_MUTAGEN}" = yes ]; then
   run ws mutagen stop
   passthru ws mutagen rm
 fi
 
-if [[ "$APP_DYNAMIC" = "no" ]]; then
-    run "docker images --filter=reference='${DOCKER_REPOSITORY}:${APP_VERSION}-*' -q | xargs --no-run-if-empty docker image rm --force"
-fi
+passthru ws cleanup built-images
 
-run rm -f .my127ws/.flag-built
+run rm -f .my127ws/{.flag-built,.flag-console-built}

@@ -1,7 +1,8 @@
+
 attributes:
   namespace: =exec("git log -n 1 --pretty=format:'%H'")
   hostname: =@('workspace.name') ~ '.' ~ @('domain')
   app:
-    dynamic: no
-    development: no
+    build: static
     version: =exec("git log -n 1 --pretty=format:'%H'")
+    mode: production

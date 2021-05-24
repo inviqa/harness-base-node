@@ -1,3 +1,6 @@
-
-app: {{ to_nice_yaml(@('environment.preview'), 2, 2) | raw }}
-image_pull_config: {{ @('docker.image_pull_config') | raw }}
+{% if @('pipeline.preview.services') %}
+services: {{ to_nice_yaml(@('pipeline.preview.services'), 2, 2) | raw }}  
+{% endif %}
+{% if @('pipeline.preview.persistence') %}
+persistence: {{ to_nice_yaml(@('pipeline.preview.persistence'), 2, 2) | raw }}
+{% endif %}

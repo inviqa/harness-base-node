@@ -1,41 +1,29 @@
 attributes:
   services:
-    node-base:
+    node:
+      enabled: true
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-console'
+      publish: true
+      build:
+        environment: {}
       environment:
         HOST_OS_FAMILY: = @('host.os')
         APP_NAME: = @('workspace.name')
         APP_HOST: = @('hostname')
-        DB_PLATFORM: = @('database.platform')
-        DB_PLATFORM_VERSION: = @('database.platform_version')
-        DB_HOST: = @('database.host')
-        DB_PORT: = @('database.port')
-        DB_USER: = @('database.user')
-        DB_NAME: = @('database.name')
-        ELASTICSEARCH_HOST: = @('elasticsearch.host')
-        ELASTICSEARCH_PORT: = @('elasticsearch.port')
-        RABBITMQ_API_PORT: = @('rabbitmq.api_port')
-        RABBITMQ_EXTERNAL_HOST: = @('rabbitmq.external_host')
-        RABBITMQ_HOST: = @('rabbitmq.host')
-        RABBITMQ_PORT: = @('rabbitmq.port')
-        RABBITMQ_USER: = @('rabbitmq.user')
-        RABBITMQ_VHOST: = @('rabbitmq.vhosts.default')
-        REDIS_HOST: = @('redis.host')
-        REDIS_PORT: = @('redis.port')
-        REDIS_SESSION_HOST: = @('redis-session.host')
-        REDIS_SESSION_PORT: = @('redis-session.port')
-        SOLR_HOST: = @('services.solr.host')
-        SOLR_PORT: = @('services.solr.port')
-        SMTP_HOST: = @('smtp.host')
-        SMTP_PORT: = @('smtp.port')
-        PHP_IDE_CONFIG: "serverName=workspace"
-        TIDEWAYS_HOST: tideways
-        VARNISH_HOSTNAME_TEMPLATE: "varnish-%d.varnish-headless"
+    nginx:
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
+      publish: true
+      resources:
+        memory: "100Mi"
+
+    lighthouse:
+      enabled: true
   pipeline:
     base:
       prometheus:
         podMonitoring: false
       services:
-        node-base:
+        node:
           environment:
             APP_HOST: = @('pipeline.base.hostname')
       ingress:
@@ -53,7 +41,8 @@ attributes:
       services:
     qa:
       services:
-        node-base:
+        node:
+	  enabled: true
           environment:
             APP_HOST: = @('pipeline.qa.hostname')
             SMTP_HOST: = @('pipeline.qa.smtp.host')
@@ -63,7 +52,8 @@ attributes:
         nginx:
           resources:
             memory: "64Mi"
-        node-base:
+        node:
+	  enabled: true
           environment:
             SMTP_HOST: = @('pipeline.preview.smtp.host')
             SMTP_PORT: = @('pipeline.preview.smtp.port')
