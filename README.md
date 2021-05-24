@@ -9,15 +9,9 @@ Each framework will fully override a base harness file if differing behaviour is
 
 ## Available Frameworks
 
-* [PHP (used as a base for everything else)](src/_base/), published to [inviqa/harness-php]
-* [Akeneo (PIM)](src/akeneo/), published to [inviqa/harness-akeneo]
-* [Drupal 8 (CMS)](src/drupal8/), published to [inviqa/harness-drupal8]
-* [Magento 1.x (Ecommerce)](src/magento1/), published to [inviqa/harness-magento1]
-* [Magento 2.x (Ecommerce)](src/magento2/), published to [inviqa/harness-magento2]
-* [Spryker (Ecommerce)](src/spryker/), published to [inviqa/harness-spryker]
-* [Symfony](src/symfony/), published to [inviqa/harness-symfony]
-* [Wordpress (CMS)](src/wordpress/), published to [inviqa/harness-wordpress]
-
+* [Node (used as a base for everything else)](src/_base/), published to [inviqa/harness-node]
+* [Node-Spa ](src/node-spa/), published to [inviqa/harness-spa]
+* [Viper (CMS)](src/viper/), published to [inviqa/harness-viper]
 ## Features of each harness
 
 * Local docker-compose development environment
@@ -173,16 +167,9 @@ Once the CHANGELOG.markdown is in the branch you wish to release:
 5. Submit a pull request to [my127/my127.io] which adds the new release version and asset download URL for the
    php-based harnesses to `harnesses.json`
 6. Create a "Github Release" for this repository and downstream repositories, pasting in the changelog for the release:
-   - https://github.com/inviqa/harness-base-php/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-php/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-akeneo/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-drupal8/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-magento1/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-magento2/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-spryker/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-symfony/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-   - https://github.com/inviqa/harness-wordpress/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
-
+   - https://github.com/inviqa/harness-base-node/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
+   - https://github.com/inviqa/harness-node-spa/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
+   - https://github.com/inviqa/harness-viper/releases/new?tag=1.1.1&title=1.1.1&target=1.1.x
 ### Post-release actions
 
 If the next release does not make sense to be in the current 1.1.x branch:
@@ -218,13 +205,8 @@ If the next release does not make sense to be in the current 1.1.x branch:
 
 [Workspace]: https://github.com/my127/workspace
 [GitHub Changelog Generator]: https://github.com/github-changelog-generator/github-changelog-generator
-[inviqa/harness-php]: https://github.com/inviqa/harness-php
-[inviqa/harness-akeneo]: https://github.com/inviqa/harness-akeneo
-[inviqa/harness-drupal8]: https://github.com/inviqa/harness-drupal8
-[inviqa/harness-magento1]: https://github.com/inviqa/harness-magento1
-[inviqa/harness-magento2]: https://github.com/inviqa/harness-magento2
-[inviqa/harness-spryker]: https://github.com/inviqa/harness-spryker
-[inviqa/harness-symfony]: https://github.com/inviqa/harness-symfony
-[inviqa/harness-wordpress]: https://github.com/inviqa/harness-wordpress
+[inviqa/harness-node]: https://github.com/inviqa/harness-node
+[inviqa/harness-node-spa]: https://github.com/inviqa/harness-node-spa
+[inviqa/harness-viper]: https://github.com/inviqa/harness-viper
 [my127/my127.io]: https://github.com/my127/my127.io
 [version specific upgrade instructions]: https://github.com/inviqa/harness-base-php/blob/1.1.x/UPGRADE.md
