@@ -30,31 +30,31 @@ pipeline {
                             }
                         }
                         stage('Node Static') {
-                            steps { sh './test php static' }
+                            steps { sh './test node static' }
                         }
                         stage('Node-Spa Static') {
-                            steps { sh './test drupal8 static' }
+                            steps { sh './test node-spa static' }
                         }
                         stage('Viper Static') {
-                            steps { sh './test akeneo static' }
+                            steps { sh './test viper static' }
                         }
                         stage('Node Dynamic') {
-                            steps { sh './test php dynamic' }
+                            steps { sh './test node dynamic' }
                         }
                         stage('Node-Spa Dynamic') {
-                            steps { sh './test drupal8 dynamic' }
+                            steps { sh './test node-spa dynamic' }
                         }
                         stage('Viper Dynamic') {
-                            steps { sh './test akeneo dynamic' }
+                            steps { sh './test viper dynamic' }
                         }
                         stage('Node Dynamic Mutagen') {
-                            steps { sh './test php dynamic mutagen' }
+                            steps { sh './test node dynamic mutagen' }
                         }
                         stage('Node-Spa Dynamic Mutagen') {
-                            steps { sh './test drupal8 dynamic mutagen' }
+                            steps { sh './test node-spa dynamic mutagen' }
                         }
                         stage('Viper Dynamic Mutagen') {
-                            steps { sh './test akeneo dynamic mutagen' }
+                            steps { sh './test viper dynamic mutagen' }
                         }
                     }
                     post {
