@@ -42,7 +42,7 @@ attributes:
     qa:
       services:
         node:
-	  enabled: true
+    enabled: true
           environment:
             APP_HOST: = @('pipeline.qa.hostname')
             SMTP_HOST: = @('pipeline.qa.smtp.host')
@@ -53,7 +53,7 @@ attributes:
           resources:
             memory: "64Mi"
         node:
-	  enabled: true
+    enabled: true
           environment:
             SMTP_HOST: = @('pipeline.preview.smtp.host')
             SMTP_PORT: = @('pipeline.preview.smtp.port')
