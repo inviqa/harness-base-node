@@ -1,17 +1,11 @@
-{% if @('app.build') == 'static' %}
-FROM {{ @('docker.repository') ~ ':' ~ @('app.version') }}-console as console
-{% endif %}
+FROM {{ @('docker.repository') ~ ':' ~ @('app.version') }}-node as node
 
-FROM nginx:1.19-alpine
-COPY root /
+FROM {{ @('docker.image.nginx') }} as nginx
+RUN apk add --no-cache jq
 
-{% if @('app.build') == 'static' %}
-{% for copy_directory in @('nginx.copy_directories')|filter(v => v is not empty) %}
-COPY --from=console {{ copy_directory }} {{ copy_directory }}
-{% endfor %}
-{% else %}
-VOLUME /app
-{% endif %}
+COPY .my127ws/docker/image/nginx/root/ /
+COPY config.jq /root/
+COPY --from=node --chown=root:root {{ @('app.dist_path') }} /usr/share/nginx/html
 
-ENTRYPOINT ["sh", "/docker-entrypoint.d/config_render.sh"]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
 CMD ["nginx", "-g", "daemon off;"]

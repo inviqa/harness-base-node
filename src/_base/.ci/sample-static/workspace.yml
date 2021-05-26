@@ -1,23 +1,16 @@
-workspace('ci-php-sample-static'):
-  description: generated local workspace for ci-php-sample.
-  harness: inviqa/php
+workspace('ci-node-sample-static'):
+  description: generated local workspace for ci-node-sample.
+  harness: inviqa/node
 
 attribute('app.build'): static
 
 attribute('app.services'):
   - chrome
-  - mysql
-  - varnish
 
 attribute('aws.bucket'): null
 attribute('app.repository'): null
 attribute('aws.access_key_id'): null
 attribute('aws.secret_access_key'): null
-
-attribute('mysql.tag'): 8
-attribute('database.platform_version'): 8.0
-attribute('php.cli.install_extensions'):
-  - sockets
 
 attribute('pipeline.base.istio.enabled'): true
 attribute('pipeline.base.ingress.annotations.example_istio'): test
