@@ -62,7 +62,6 @@ attributes.default:
         name: null
       namespace: = @('workspace.name') ~ '-' ~ slugify(branch())
       hostname:  = @('pipeline.preview.namespace') ~ '.example.com'
-
     qa:
       enabled: no
       environment: {}
@@ -71,7 +70,6 @@ attributes.default:
         name: null
       namespace: = @('workspace.name') ~ '-' ~ 'qa'
       hostname: = @('pipeline.qa.namespace') ~ '.example.com'
-
 
   docker:
     registry:
@@ -154,7 +152,7 @@ attributes.default:
   node:
     # only set this attribute if you wish to override the supplied node version, by default
     # the supplied version will be the current LTS.
-    version: null
+    version: lts
 
   assets:
     remote: ="s3://"~@("aws.bucket")~"/development"
@@ -188,6 +186,10 @@ attributes.default:
       # The scope under which a secret can be decrypted
       # Either cluster-wide, namespace-wide, or strict
       scope: "= @('helm.sealed_secrets.namespace') ? 'namespace-wide' : 'cluster-wide'"
+
+    persistence:
+      enabled: false
+      mountVolumesOnNode: true # possible to disable, but may lead to unexpected concequences with app init/migrate
 
   tls:
     key: |

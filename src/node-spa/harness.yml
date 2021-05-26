@@ -58,7 +58,6 @@ attributes:
 
   docker:
     image:
-      node: = 'node:' ~ @('node.version') ~ '-slim'
       nginx: nginx:1.17-alpine
 ---
 import:

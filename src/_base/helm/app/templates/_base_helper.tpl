@@ -25,14 +25,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 
 {{- define "application.volumes.wwwDataPaths" }}{{ end }}
 
-{{- define "application.volumes.console" -}}
-{{- if .Values.persistence.mountVolumesOnConsole -}}
+{{- define "application.volumes.node" -}}
+{{- if .Values.persistence.mountVolumesOnNode -}}
 {{- template "application.volumes.backend" . -}}
 {{- template "application.volumes.all" . -}}
 {{- end -}}
 {{- end }}
-{{- define "application.volumeMounts.console" -}}
-{{- if .Values.persistence.mountVolumesOnConsole -}}
+{{- define "application.volumeMounts.node" -}}
+{{- if .Values.persistence.mountVolumesOnNode -}}
 {{- template "application.volumeMounts.backend" . -}}
 {{- template "application.volumeMounts.all" . -}}
 {{- end -}}
