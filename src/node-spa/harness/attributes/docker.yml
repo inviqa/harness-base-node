@@ -1,0 +1,22 @@
+---
+attributes:
+  services:
+    node:
+      enabled: = true
+    lighthouse:
+      enabled: true
+    nginx:
+      enabled: = @('app.build') == 'static'
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
+      publish: true
+      resources:
+        memory: "100Mi"
+  docker:
+    image:
+      nginx: nginx:1.17-alpine
+  pipeline:
+    preview:
+      services:
+        nginx:
+          resources:
+            memory: "64Mi"

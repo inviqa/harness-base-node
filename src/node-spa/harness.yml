@@ -45,9 +45,17 @@ attributes:
         APP_NAME: = @('workspace.name')
         APP_HOST: = @('hostname')
     nginx:
-      publish: true
       environment:
         APP_HOST: = @('hostname')
+      # used to set site specific configurations under server directive
+      site:
+        conf: []
+      # used to set nginx global configurations under http directive
+      global:
+        conf: []
+      # used to limit what is copied into an Nginx static-built image
+      copy_directories:
+       - = @('app.web_directory')
 
   pipeline:
     preview:
@@ -56,9 +64,6 @@ attributes:
           nginx: "64Mi"
           node: "1024Mi"
 
-  docker:
-    image:
-      nginx: nginx:1.17-alpine
 ---
 import:
   - harness/config/*.yml

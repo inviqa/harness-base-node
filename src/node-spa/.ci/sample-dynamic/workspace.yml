@@ -1,10 +1,16 @@
-workspace('ci-node-spa-sample-dynamic'):
+workspace('ci-node-sample-dynamic'):
   description: generated local workspace for ci-node-spa-sample.
   harness: inviqa/node-spa
 
-attribute('app.build'): dynamic
+attribute('app.services'):
+  - chrome
+  - lighthouse
 
 attribute('aws.bucket'): null
 attribute('app.repository'): null
-attribute('aws.id'): null
-attribute('aws.key'): null
+attribute('aws.access_key_id'): null
+attribute('aws.secret_access_key'): null
+
+attribute('docker.port_forward.enabled'): false
+
+attribute('pipeline.base.ingress.annotations.example_nginx'): test

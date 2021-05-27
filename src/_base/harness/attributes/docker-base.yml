@@ -10,14 +10,8 @@ attributes:
         HOST_OS_FAMILY: = @('host.os')
         APP_NAME: = @('workspace.name')
         APP_HOST: = @('hostname')
-    nginx:
-      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
-      publish: true
-      resources:
-        memory: "100Mi"
-
     lighthouse:
-      enabled: false 
+      enabled: false
   pipeline:
     base:
       prometheus:
@@ -49,9 +43,6 @@ attributes:
             SMTP_PORT: = @('pipeline.qa.smtp.port')
     preview:
       services:
-        nginx:
-          resources:
-            memory: "64Mi"
         node:
           enabled: true
           environment:
