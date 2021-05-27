@@ -4,9 +4,6 @@ workspace('ci-node-sample-static'):
 
 attribute('app.build'): static
 
-attribute('app.services'):
-  - chrome
-
 attribute('aws.bucket'): null
 attribute('app.repository'): null
 attribute('aws.access_key_id'): null
@@ -14,15 +11,3 @@ attribute('aws.secret_access_key'): null
 
 attribute('pipeline.base.istio.enabled'): true
 attribute('pipeline.base.ingress.annotations.example_istio'): test
-
-before('harness.install'): |
-  #!bash(workspace:/)|@
-  if [ ! -d public/ ]; then
-    mkdir public
-  fi
-  if [ ! -d vendor/ ]; then
-    mkdir vendor
-  fi
-  if [ ! -f public/index.php ]; then
-    echo "<?php echo('Hello, @('workspace.name')');" > public/index.php
-  fi
