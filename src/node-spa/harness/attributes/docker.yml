@@ -11,9 +11,6 @@ attributes:
       publish: true
       resources:
         memory: "100Mi"
-  docker:
-    image:
-      nginx: nginx:1.17-alpine
   pipeline:
     preview:
       services:

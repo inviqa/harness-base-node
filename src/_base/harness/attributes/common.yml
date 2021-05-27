@@ -85,7 +85,9 @@ attributes.default:
     # If using gitops helm chart repositories, it's recommended to put this configuration
     # in the values.yml in there now instead of project application repositories
     image_pull_config: = @('docker.config')
-    image: ~
+    image:
+      node: = 'node:' ~ @('node.version') ~ '-slim'
+      nginx: nginx:1.17-alpine
     port_forward:
       enabled: "= @('app.build') == 'dynamic'"
 
