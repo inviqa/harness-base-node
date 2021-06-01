@@ -86,7 +86,9 @@ function run_pipeline_tests()
     local harness="$1"
     cd "${path_test}"
 
-    ws helm kubeval app
+    ws helm kubeval --cleanup app
+    ws lighthouse
+
 )
 
 function restart_environment()

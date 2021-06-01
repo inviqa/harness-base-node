@@ -200,3 +200,10 @@ command('generate token <length>'):
         $string .= $char;
     }
     echo $string;
+
+command('lighthouse'):
+  env:
+    COMPOSE_PROJECT_NAME: = @('namespace')
+  exec: |
+    #!bash(workspace:/)|@
+    passthru docker-compose run --rm lighthouse bash -i /app/run.sh
