@@ -1,8 +1,11 @@
+{{- if .Values.services.nginx.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Values.resourcePrefix }}nginx
   labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: nginx
     app.service: {{ .Values.resourcePrefix }}nginx
   annotations:
     argocd.argoproj.io/sync-wave: "15"
@@ -15,12 +18,15 @@ spec:
   template:
     metadata:
       labels:
+        {{- include "chart.selectors" $ | nindent 8 }}
+        app.kubernetes.io/component: nginx
         app.service: {{ .Values.resourcePrefix }}nginx
     spec:
       containers:
+      {{- with .Values.services.nginx }}
       - name: nginx
         env:
-        {{- range $key, $value := .Values.services.nginx.environment }}
+        {{- range $key, $value := (mergeOverwrite (dict) .environment .environment_dynamic) }}
         {{- $tp := typeOf $value }}
         - name: {{ $key | quote }}
         {{- if eq $tp "string" }}
@@ -29,26 +35,27 @@ spec:
           value: {{ $value | quote }}
         {{- end }}
         {{- end }}
-        {{- if .Values.services.nginx.environment_secrets }}
+        {{- if .environment_secrets }}
         envFrom:
           - secretRef:
-              name: {{ .Values.resourcePrefix }}nginx
+              name: {{ $.Values.resourcePrefix }}nginx
         {{- end }}
-        image: {{ .Values.docker.image.nginx }}
+        image: {{ .image }}
         imagePullPolicy: Always
         ports:
         - name: http
           containerPort: 80
         resources:
           limits:
-            memory: {{ .Values.resources.memory.nginx }}
+            memory: {{ .resources.memory }}
           requests:
-            memory: {{ .Values.resources.memory.nginx }}
+            memory: {{ .resources.memory }}
         readinessProbe:
           tcpSocket:
             port: 80
           initialDelaySeconds: 5
           periodSeconds: 10
+      {{- end }}
 {{- if .Values.docker.image_pull_config }}
       imagePullSecrets:
       - name: {{ .Values.resourcePrefix }}image-pull-config
@@ -56,3 +63,4 @@ spec:
       restartPolicy: Always
       enableServiceLinks: false
 status: {}
+{{- end }}

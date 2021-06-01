@@ -1,15 +1,15 @@
-{{ if eq .Values.ingress.type "standard" }}
-apiVersion: extensions/v1beta1
+{{ if and (index .Values.services .Values.ingress.target_service "enabled") (eq .Values.ingress.type "standard") }}
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-{{- if .Values.services.nginx.ingress.annotations }}
+{{- with .Values.ingress.annotations }}
   annotations:
-  {{- range $key, $value := .Values.services.nginx.ingress.annotations }}
-    {{ $key }}: {{ $value | quote }}
-  {{- end }}
+    {{- . | toYaml | nindent 4 }}
 {{- end }}
   creationTimestamp: null
   labels:
+    {{- include "chart.labels" . | nindent 4 }}
+    app.kubernetes.io/component: nginx
     app.service: {{ .Values.resourcePrefix }}nginx
   name: {{ .Values.resourcePrefix }}nginx
 spec:
@@ -18,8 +18,8 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: {{ .Values.resourcePrefix }}nginx
+          serviceName: {{ .Values.resourcePrefix }}{{ .Values.ingress.target_service }}
           servicePort: 80
 status:
   loadBalancer: {}
-{{ end }}
+{{- end }}
