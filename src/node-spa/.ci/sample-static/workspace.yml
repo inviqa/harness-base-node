@@ -6,7 +6,7 @@ attribute('app.build'): static
 
 attribute('app.services'):
   - chrome
-  - lighthouse
+  # - lighthouse
 
 attribute('aws.bucket'): null
 attribute('app.repository'): null

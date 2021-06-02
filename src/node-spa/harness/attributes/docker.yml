@@ -3,8 +3,6 @@ attributes:
   services:
     node:
       enabled: = true
-    lighthouse:
-      enabled: true
     nginx:
       enabled: = @('app.build') == 'static'
       image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'

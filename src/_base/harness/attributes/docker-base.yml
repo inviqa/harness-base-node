@@ -11,7 +11,7 @@ attributes:
         APP_NAME: = @('workspace.name')
         APP_HOST: = @('hostname')
     lighthouse:
-      enabled: false
+      enabled: "= 'lighthouse' in @('app.services')"
   pipeline:
     base:
       prometheus:

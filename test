@@ -87,7 +87,7 @@ function run_pipeline_tests()
     cd "${path_test}"
 
     ws helm kubeval --cleanup app
-    ws lighthouse
+    # ws lighthouse
 
 )
 
