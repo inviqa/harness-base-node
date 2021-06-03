@@ -12,6 +12,12 @@ attributes:
         APP_HOST: = @('hostname')
     lighthouse:
       enabled: "= 'lighthouse' in @('app.services')"
+    nginx:
+      enabled: false
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
+      publish: true
+      resources:
+        memory: "100Mi"
   pipeline:
     base:
       prometheus:
@@ -43,6 +49,9 @@ attributes:
             SMTP_PORT: = @('pipeline.qa.smtp.port')
     preview:
       services:
+        nginx:
+          resources:
+            memory: "64Mi"
         node:
           enabled: true
           environment:
