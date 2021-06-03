@@ -1,17 +1,5 @@
 ---
 attributes:
   services:
-    node:
-      enabled: = true
     nginx:
       enabled: = @('app.build') == 'static'
-      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
-      publish: true
-      resources:
-        memory: "100Mi"
-  pipeline:
-    preview:
-      services:
-        nginx:
-          resources:
-            memory: "64Mi"
