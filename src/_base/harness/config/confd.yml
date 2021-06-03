@@ -3,8 +3,6 @@ confd('harness:/'):
   # base templates
   - { src: docker/image/node/Dockerfile }
   - { src: docker/image/node/root/lib/task/build/frontend.sh }
-  - { src: docker/image/node/root/lib/task/build/backend.sh }
-  - { src: docker/image/node/root/lib/task/start/dev.sh }
   - { src: docker/image/lighthouse/Dockerfile }
   - { src: docker/image/lighthouse/root/app/run.sh }
   - { src: docker/image/nginx/Dockerfile }
