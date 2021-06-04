@@ -13,7 +13,7 @@ attributes:
     lighthouse:
       enabled: "= 'lighthouse' in @('app.services')"
     nginx:
-      enabled: false
+      enabled: "= 'nginx' in @('app.services')"
       image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
       publish: true
       resources:
