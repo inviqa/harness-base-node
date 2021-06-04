@@ -1,13 +1,8 @@
 command('app build'):
-  env:
-    HAS_JENKINS_RUNNER: "= @('services.jenkins-runner.enabled') ? 'true' : 'false'"
   exec: |
     #!bash(workspace:/)|@
     ws external-images pull
     passthru docker-compose build node
-    if [[ "${HAS_JENKINS_RUNNER}" == "true" ]]; then
-      passthru docker-compose build jenkins-runner
-    fi
 
 command('app build <service>'):
   env:
