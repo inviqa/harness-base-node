@@ -36,6 +36,7 @@ enable_all()
         fi
 
         passthru docker-compose up -d
+        passthru docker-compose exec -T -u node node app welcome
     fi
 }
 
@@ -60,6 +61,13 @@ initial_start()
 {
     # Bring up all services
     passthru "docker-compose config --services | xargs docker-compose up -d"
+
+    if [ "$APP_BUILD" = 'dynamic' ]; then
+        passthru docker-compose exec -T -u node node app build
+    fi
+
+
+    passthru docker-compose exec -T -u node node app init
 }
 
 "enable_$1"
