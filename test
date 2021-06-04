@@ -35,9 +35,6 @@ function test()
     run_pipeline_tests "$harness"
     restart_environment
     check_environment_started "$harness" "$mode"
-    if [[ "$sync" != "" ]]; then
-      wait_for_vendor_directory
-    fi
     teardown
 )
 
