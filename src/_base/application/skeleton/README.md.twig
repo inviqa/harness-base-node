@@ -29,11 +29,6 @@ Please follow the below steps to get started, if you encounter any issues instal
 
 {% include blocks ~ 'websites.md.twig' %}
 
-**Additional services**:
-
-{% if @('services.jenkins.enabled') -%}
-- Jenkins: [https://{{ @('jenkins.external_host') }}](https://{{ @('jenkins.external_host') }})
-{% endif %}
 ### Development environment cleanup
 
 To stop the development environment, run `ws disable`.

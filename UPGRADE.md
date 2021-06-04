@@ -16,7 +16,7 @@ To opt out from buildkit locally, set `attribute('docker.buildkit.enabled'): fal
 
 #### Minimal Build
 
-Jenkins now performs a minimal build with the `console` docker image and no supporting services,
+Jenkins now performs a minimal build with the `node` docker image and no supporting services,
 to allow faster feedback for linting or unit test issues.
 If this minimal build passes, Jenkins will launch a full build to run integration tests.
 

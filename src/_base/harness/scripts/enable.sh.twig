@@ -45,11 +45,8 @@ dynamic()
 {
     ws external-images pull
 
-    passthru "docker-compose config --services | grep -v  -Fxe jenkins-runner | xargs docker-compose build"
+    passthru "docker-compose config --services | xargs docker-compose build"
 
-    {% if @('services.jenkins-runner.enabled') %}
-        passthru docker-compose build jenkins-runner
-    {% endif %}
 }
 
 static()

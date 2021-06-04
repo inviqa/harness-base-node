@@ -71,8 +71,6 @@ Each harness deploys:
 * A NGINX/PHP-FPM "webapp" pod for running the php-based application and serving web requests
 * A service to route to the "webapp" pods
 * An ingress definition to route via the "webapp" service
-* Optionally, a "cron" pod for running cronjobs
-* Optionally, elasticsearch, mysql, postgres, redis for supporting services
 
 ### Memory
 
