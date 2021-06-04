@@ -24,13 +24,6 @@ pipeline {
             }
         }
 {% endif %}
-        stage('Checks without development dependencies') {
-            steps {
-                sh 'ws exec composer test-production-quality'
-                sh 'ws exec app composer:development_dependencies'
-                milestone(20)
-            }
-        }
         stage('Test')  {
             parallel {
                 stage('quality')    { steps { sh 'ws exec yarn lint'    } }

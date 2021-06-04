@@ -47,8 +47,7 @@ ws harness prepare
 7. Perform a recursive diff between the `.my127ws/application/skeleton/` folder to the project root:
     1. If a skeleton file (that isn't in a `_twig` folder or named `*.twig`) is missing, copy it to the project
     2. If a project file is missing some changes from the skeleton, try applying the change from the skeleton.
-    3. Port over new features such as new standard dev tooling in composer.json.
-    4. Ensure the README.md is up to date, though keep any changes made to the project's README.md over time.
+    3. Ensure the README.md is up to date, though keep any changes made to the project's README.md over time.
 8. Compare the overrides for attributes in the project's `workspace.yml` to the harness's `harness.yml` and `harness/attributes/*.yml`.
     1. Port over any additional build, init or migrate steps.
     2. Remove any attribute overrides from workspace.yml that are now the same as the harness.

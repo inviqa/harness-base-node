@@ -111,27 +111,6 @@ function setup_dynamic_mutagen()
     echo "attribute('mutagen'): yes" >> workspace.override.yml
 )
 
-function wait_for_vendor_directory()
-(
-    set +x
-    cd "${path_test}"
-    if [ ! -f composer.json ]; then
-        return 0
-    fi
-    local timer=600
-    while [ $timer -gt 0 ]; do
-      if [ -d vendor ]; then
-          echo "Found vendor directory, sync worked"
-          return 0
-      fi
-      timer=$(( timer - 1 ))
-      sleep 1
-    done
-    echo "vendor directory not found within 600 seconds, sync failed"
-    ls -la
-    return 1
-)
-
 function teardown()
 (
     cd "${path_test}"
