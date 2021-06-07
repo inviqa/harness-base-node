@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+
+enable_all()
+{
+    local IS_BUILT=no
+    local HAS_FLAG=no
+
+    if [ -f .my127ws/.flag-built ]; then
+        HAS_FLAG=yes
+        IS_BUILT=yes
+        # If the containers no longer exist, we need to rebuild them
+        if [ -z "$(docker-compose ps --quiet)" ]; then
+            IS_BUILT=no
+        fi
+    fi
+
+    passthru ws networks external
+
+    if [ "$IS_BUILT" = no ]; then
+        if [ "$HAS_FLAG" = no ]; then
+          passthru docker-compose down
+        fi
+        
+        if [ "$HAS_ASSETS" = yes ]; then
+            ws assets download
+        fi
+
+        "$APP_BUILD"
+
+        initial_start
+
+        touch .my127ws/.flag-built
+    else
+        if [ "$APP_BUILD" = dynamic ] && [ "$USE_MUTAGEN" = yes ]; then
+            passthru ws mutagen resume
+        fi
+
+        passthru docker-compose up -d
+        passthru docker-compose exec -T -u node node app welcome
+    fi
+}
+
+
+dynamic()
+{
+    ws external-images pull
+
+    passthru "docker-compose config --services | xargs docker-compose build"
+}
+
+static()
+{
+    ws app build
+}
+
+initial_start()
+{
+    # Bring up all services
+    passthru "docker-compose config --services | xargs docker-compose up -d"
+
+    if [ "$APP_BUILD" = 'dynamic' ]; then
+        passthru docker-compose exec -T -u node node app build
+        run ws gateway restart
+        run ws client restart
+    fi
+
+    passthru docker-compose exec -T -u node node app init
+}
+
+"enable_$1"
