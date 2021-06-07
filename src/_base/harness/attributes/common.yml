@@ -30,7 +30,7 @@ attributes.default:
       resourcePrefix: ~
       hostname:  = @('pipeline.preview.hostname')
     publish:
-      enabled: no
+      enabled: false
       services: = publishable_services(@('services'))
       # branches that should publish (other than change requests and qa)
       # * is deprecated and will be limited to one branch by default in a future release
@@ -42,7 +42,7 @@ attributes.default:
       # when enabled the application helm chart will be published
       # to the given git repository.
       chart:
-        enabled: no
+        enabled: false
         git:
           # private key with write access to the repository
           ssh_private_key: = @('pipeline.publish.chart.git.key')
@@ -54,7 +54,7 @@ attributes.default:
           # sets the git user.email before pushing the commit
           email: name@example.com
     preview:
-      enabled: no
+      enabled: false
       target_branches:
         - = @('git.default_branch')
       environment: {}
@@ -63,7 +63,7 @@ attributes.default:
       namespace: = @('workspace.name') ~ '-' ~ slugify(branch())
       hostname:  = @('pipeline.preview.namespace') ~ '.example.com'
     qa:
-      enabled: no
+      enabled: false
       environment: {}
       branch: develop
       cluster:
