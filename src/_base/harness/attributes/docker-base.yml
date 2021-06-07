@@ -12,6 +12,8 @@ attributes:
         APP_HOST: = @('hostname')
     lighthouse:
       enabled: "= 'lighthouse' in @('app.services')"
+    chrome:
+      enabled: "= 'chrome' in @('app.services')"
     nginx:
       enabled: "= 'nginx' in @('app.services')"
       image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
