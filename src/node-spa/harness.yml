@@ -19,6 +19,9 @@ attributes:
   app:
     dist_path: /app/build
     node_web_port: 80
+    services:
+      - chrome
+      #- lighthouse
 
   backend:
     path: /app
