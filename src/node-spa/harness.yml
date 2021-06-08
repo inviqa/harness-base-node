@@ -12,7 +12,7 @@ command('frontend build'):
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
-    passthru docker-compose exec -u node node app build:frontend
+    passthru docker compose exec -u node node app build:frontend
 ---
 attributes:
 

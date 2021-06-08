@@ -6,7 +6,7 @@ else
   RMI=local
 fi
 
-run docker-compose down --rmi "${RMI}" --volumes --remove-orphans --timeout 120
+run docker compose down --rmi "${RMI}" --volumes --remove-orphans --timeout 12
 
 if [ "${USE_MUTAGEN}" = yes ]; then
   run ws mutagen stop

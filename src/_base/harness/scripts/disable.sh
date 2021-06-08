@@ -4,4 +4,4 @@ if [[ "$USE_MUTAGEN" = "yes" ]]; then
     run ws mutagen pause
 fi
 
-run docker-compose stop
+run docker compose stop

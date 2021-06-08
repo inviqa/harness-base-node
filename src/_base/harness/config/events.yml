@@ -8,8 +8,8 @@ after('harness.refresh'):
     COMPOSE_PROJECT: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
-    run docker-compose stop
+    run docker compose stop
     ws external-images pull
-    passthru "docker-compose config --services | xargs docker-compose build"
-    passthru "docker-compose config --services | xargs docker-compose up -d"
-    run docker-compose up -d --build
+    passthru "docker-compose config --services | xargs docker compose build"
+    passthru "docker-compose config --services | xargs docker compose up -d"
+    run docker compose up -d --build

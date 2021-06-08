@@ -19,7 +19,7 @@ enable_all()
 
     if [ "$IS_BUILT" = no ]; then
         if [ "$HAS_FLAG" = no ]; then
-          passthru docker-compose down
+          passthru docker compose down
         fi
         
         if [ "$HAS_ASSETS" = yes ]; then
@@ -36,8 +36,8 @@ enable_all()
             passthru ws mutagen resume
         fi
 
-        passthru docker-compose up -d
-        passthru docker-compose exec -T -u node node app welcome
+        passthru docker compose up -d
+        passthru docker compose exec -T -u node node app welcome
     fi
 }
 
@@ -46,7 +46,7 @@ dynamic()
 {
     ws external-images pull
 
-    passthru "docker-compose config --services | xargs docker-compose build"
+    passthru "docker-compose config --services | xargs docker compose build"
 }
 
 static()
@@ -57,15 +57,15 @@ static()
 initial_start()
 {
     # Bring up all services
-    passthru "docker-compose config --services | xargs docker-compose up -d"
+    passthru "docker-compose config --services | xargs docker compose up -d"
 
     if [ "$APP_BUILD" = 'dynamic' ]; then
-        passthru docker-compose exec -T -u node node app build
+        passthru docker compose exec -T -u node node app build
         run ws gateway restart
         run ws client restart
     fi
 
-    passthru docker-compose exec -T -u node node app init
+    passthru docker compose exec -T -u node node app init
 }
 
 "enable_$1"
