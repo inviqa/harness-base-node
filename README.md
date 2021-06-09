@@ -206,4 +206,4 @@ If the next release does not make sense to be in the current 1.1.x branch:
 [inviqa/harness-node-spa]: https://github.com/inviqa/harness-node-spa
 [inviqa/harness-viper]: https://github.com/inviqa/harness-viper
 [my127/my127.io]: https://github.com/my127/my127.io
-[version specific upgrade instructions]: https://github.com/inviqa/harness-base-php/blob/1.1.x/UPGRADE.md
+[version specific upgrade instructions]: https://github.com/inviqa/harness-base-node/blob/0.2.x/UPGRADE.md
