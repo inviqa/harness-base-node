@@ -1,4 +1,4 @@
-# Harness Base PHP for [Workspace]
+# Harness Base Node for [Workspace]
 
 A [Workspace] harness is a way to ship files to a project without being part of the project.
 
