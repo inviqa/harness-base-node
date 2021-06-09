@@ -15,7 +15,6 @@ command('frontend build'):
     passthru docker compose exec -u node node app build:frontend
 ---
 attributes:
-
   app:
     dist_path: /app/build
     node_web_port: 80
