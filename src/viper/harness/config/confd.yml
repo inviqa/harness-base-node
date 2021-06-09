@@ -2,20 +2,24 @@
 confd('harness:/'):
   - { src: docker/image/node/Dockerfile }
   - { src: docker/image/node/root/etc/supervisor/conf.d/client.conf }
-  - { src: docker/image/node/root/lib/task/build.sh }
   - { src: docker/image/node/root/lib/task/build/gateway.sh }
   - { src: docker/image/node/root/lib/task/build/client.sh }
   - { src: application/overlay/Jenkinsfile }
+  - { src: application/overlay/.dockerignore, dst: workspace:/.dockerignore }
   - { src: application/overlay/.yarnrc.yml, dst: workspace:/.yarnrc.yml }
   - { src: application/overlay/.dockerignore, dst: workspace:/.dockerignore }
   - { src: application/overlay/app/client/config/default.js, dst: workspace:/app/client/config/default.js }
-  - { src: application/skeleton/README.md }
   - { src: application/skeleton/package.json }
   - { src: application/skeleton/app/gateway/package.json }
   - { src: application/skeleton/app/client/package.json }
-  - { src: mutagen.yml, dst: workspace:/mutagen.yml }
+  - { src: application/skeleton/README.md }
+  - { src: mutagen.yml, dst: workspace:/mutagen.yml } # docker-compose.yml render reads this file
   - { src: docker-compose.yml, dst: workspace:/docker-compose.yml }
+  - { src: harness/scripts/enable.sh }
   - { src: helm/app/values.yaml }
   - { src: helm/app/values-production.yaml }
   - { src: helm/app/values-preview.yaml }
   - { src: helm/app/Chart.yaml }
+  - { src: helm/qa/requirements.yaml }
+  - { src: helm/qa/values.yaml }
+  - { src: helm/qa/Chart.yaml }
