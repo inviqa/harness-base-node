@@ -39,11 +39,18 @@ attributes:
     repositories:
       inviqa:
         host: npm.pkg.github.com
-        # token: ~
+        token: ~
+
   app:
     image_pull_config: null
     image: = @('docker.repository') ~ ':' ~ @('app.version')
+    resourcePrefix: ''
+    services: []
+
+  backend:
+    path: /app
     build:
+      when: 'true'
       steps:
       - run yarn install
       - run yarn generate:types
