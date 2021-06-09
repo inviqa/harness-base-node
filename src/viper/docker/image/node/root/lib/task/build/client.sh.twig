@@ -2,7 +2,13 @@
 
 function task_build_client()
 {
-    {% for step in @('app.client.build.steps') -%}
+    cd {{ @('client.path') }}
+
+    if [ ! {{ @('client.build.when')|raw }} ]; then
+        return 0;
+    fi
+
+    {% for step in @('client.build.steps') -%}
     {{ step|raw }}
     {% endfor %}
 
