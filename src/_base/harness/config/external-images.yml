@@ -49,7 +49,7 @@ command('external-images pull [<service>]'):
       CONF_ARGS+=("$SERVICE")
     fi
 
-    passthru "ws external-images config $(printf '%q ' "${CONF_ARGS[@]}") | docker compose -f - pull"
+    passthru "ws external-images config $(printf '%q ' "${CONF_ARGS[@]}") | docker-compose -f - pull"
 
 command('external-images ls [--all]'):
   env:

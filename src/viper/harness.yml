@@ -25,14 +25,14 @@ command('gateway <action>'):
     ACTION: = input.argument('action')
   exec: |
     #!bash(workspace:/)
-    passthru docker compose exec node supervisorctl "${ACTION}" "gateway"
+    passthru docker-compose exec node supervisorctl "${ACTION}" "gateway"
 command('client <action>'):
   env:
     COMPOSE_PROJECT_NAME: = @('namespace')
     ACTION: = input.argument('action')
   exec: |
     #!bash(workspace:/)
-    passthru docker compose exec node supervisorctl "${ACTION}" "client"
+    passthru docker-compose exec node supervisorctl "${ACTION}" "client"
 ---
 attributes:
   npm:
