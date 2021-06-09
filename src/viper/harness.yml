@@ -10,7 +10,7 @@ harness('inviqa/viper'):
     attributes:
       secret:
         - npm.repositories.inviqa.token
-        - app.gateway.env.AUTH_TOKEN_SECRET
+        - gateway.env.AUTH_TOKEN_SECRET
 ---
 command('gateway rebuild'):
   env:
@@ -72,7 +72,7 @@ attributes:
     env:
       SUPERVISOR_START_GATEWAY: "true"
       GATEWAY_HOST: = 'gateway-' ~ @('hostname')
-      # AUTH_TOKEN_SECRET: ~
+      AUTH_TOKEN_SECRET: ~
     secrets: ~
     ingress:
       enabled: true

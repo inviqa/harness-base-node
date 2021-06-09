@@ -26,22 +26,22 @@
       - traefik.enable=true
       - traefik.docker.network=my127ws
       - traefik.gateway.backend={{ 'gateway-' ~ @('workspace.name') }}
-      - traefik.gateway.frontend.rule=Host:{{ @('app.gateway.ingress.hosts.0') }}
-      - traefik.gateway.port={{ @('app.gateway.port')}}
+      - traefik.gateway.frontend.rule=Host:{{ @('gateway.ingress.hosts.0') }}
+      - traefik.gateway.port={{ @('gateway.port')}}
       - traefik.client.backend={{ 'client-' ~ @('workspace.name') }}
-      - traefik.client.frontend.rule=Host:{{ @('app.client.ingress.hosts.0') }}
-      - traefik.client.port={{ @('app.client.port')}}
+      - traefik.client.frontend.rule=Host:{{ @('client.ingress.hosts.0') }}
+      - traefik.client.port={{ @('client.port')}}
     networks:
       private: {}
       shared: {}
     expose:
-      - {{ @('app.gateway.port')}}
-      - {{ @('app.client.port') }}
+      - {{ @('gateway.port')}}
+      - {{ @('client.port') }}
     environment: {{ to_nice_yaml(deep_merge([
         {
           'HOST_OS_FAMILY': @('host.os')
         },
         @('app.env'),
-        @('app.gateway.env'),
-        @('app.client.env')
+        @('gateway.env'),
+        @('client.env')
       ]), 2, 6) | raw }}

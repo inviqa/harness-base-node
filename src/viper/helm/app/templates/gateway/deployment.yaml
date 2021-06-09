@@ -19,9 +19,9 @@ spec:
     spec:
       containers:
       - name: viper-gateway
-        {{- if .Values.app.gateway.env }}
+        {{- if .Values.gateway.env }}
         env:
-        {{- range $key, $value := .Values.app.gateway.env }}
+        {{- range $key, $value := .Values.gateway.env }}
         {{- $tp := typeOf $value }}
         - name: {{ $key | quote }}
         {{- if eq $tp "string" }}
@@ -35,15 +35,15 @@ spec:
         imagePullPolicy: Always
         ports:
         - name: http
-          containerPort: {{ .Values.app.gateway.port }}
+          containerPort: {{ .Values.gateway.port }}
         resources:
           limits:
-            memory: "{{ .Values.app.gateway.resources.memory }}"
+            memory: "{{ .Values.gateway.resources.memory }}"
           requests:
-            memory: "{{ .Values.app.gateway.resources.memory }}"
+            memory: "{{ .Values.gateway.resources.memory }}"
         readinessProbe:
           tcpSocket:
-            port: {{ .Values.app.gateway.port }}
+            port: {{ .Values.gateway.port }}
           initialDelaySeconds: 5
           periodSeconds: 10
 {{- if .Values.app.image_pull_config }}
