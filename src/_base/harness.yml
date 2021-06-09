@@ -7,12 +7,6 @@ harness('inviqa/node'):
     confd:
       - harness:/
 ---
-attributes:
-  app:
-    dist_path: /app/build
-    node_web_port: 80
-    services: []
----
 import:
   - harness/config/*.yml
   - harness/attributes/*.yml
