@@ -160,7 +160,7 @@ attributes.default:
       # it causes the secrets in it to be stored plaintext on filesystem
       # or in helm chart repositories
       # requires sealed-secrets k8s operator
-      sealed_secrets: false
+      sealed_secrets: true
     timeout: 300
 
     sealed_secrets:
