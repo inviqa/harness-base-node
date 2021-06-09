@@ -2,8 +2,8 @@
 
 A [Workspace] harness is a way to ship files to a project without being part of the project.
 
-In this repository are a set of harnesses that have been created for the PHP language, reducing the maintenance overhead
-of the individual harnesses greatly. This is due to the "base" PHP harness being used as a common set of templates.
+In this repository are a set of harnesses that have been created for the NodeJS language, reducing the maintenance overhead
+of the individual harnesses greatly. This is due to the "base" NodeJS harness being used as a common set of templates.
 
 Each framework will fully override a base harness file if differing behaviour is required.
 
