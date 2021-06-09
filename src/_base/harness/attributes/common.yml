@@ -87,7 +87,7 @@ attributes.default:
     image_pull_config: = @('docker.config')
     image:
       node: = 'node:' ~ @('node.version') ~ '-slim'
-      nginx: nginx:1.17-alpine
+      nginx: nginx:1.21-alpine
     port_forward:
       enabled: "= @('app.build') == 'dynamic'"
 
