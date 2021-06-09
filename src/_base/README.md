@@ -1,9 +1,9 @@
-# PHP Harness for [Workspace]
+# NodeJS Harness for [Workspace]
 
 To use this harness:
 
 1. Install [Workspace]
-2. Run `ws create <projectName> inviqa/php:v1.1.1`
+2. Run `ws create <projectName> inviqa/node:v0.2.0`
 3. Fill in project-specific AWS and Github credentials, set as blank if you don't need them
 4. Change to the <projectName> directory: `cd <projectName>`
 5. Create an initial commit, ensuring that `workspace.override.yml` is not added to git:
