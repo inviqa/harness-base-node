@@ -26,29 +26,30 @@ RUN echo 'APT::Install-Recommends 0;' >> /etc/apt/apt.conf.d/01norecommends \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /sbin/docker-init
+RUN chmod +x /sbin/docker-init
+
 COPY .my127ws/docker/image/node/root /
 
 WORKDIR /app
 
-ENV APP_DEVELOPMENT={{ @('app.development') }}
-ENV APP_DYNAMIC={{ @('app.dynamic') }}
+ENV APP_MODE={{ @('app.mode') }}
 
-{% if @('app.dynamic') == 'yes' %}
-
-USER root
-VOLUME /app
-VOLUME /home/node/application
-ENTRYPOINT ["/entrypoint.dynamic.sh"]
-
-{% else %}
-
+{% if @('app.build') == 'static' %}
 RUN chown node:node /app
 COPY --chown=node:node .my127ws/application  /home/node/application
 COPY --chown=node:node ./                    /app
-RUN cd /app/app/client/config; mv default.build.js default.js
 USER node
 RUN app build
 USER root
-ENTRYPOINT ["/entrypoint.sh"]
 
+ENTRYPOINT ["/entrypoint.sh"]
+{% else %}
+USER root
+
+VOLUME /app
+VOLUME /home/node/application
+
+ENTRYPOINT ["/entrypoint.dynamic.sh"]
 {% endif %}
