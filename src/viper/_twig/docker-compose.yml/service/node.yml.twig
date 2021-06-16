@@ -9,13 +9,9 @@
     build:
       context: ./
       dockerfile: .my127ws/docker/image/node/Dockerfile
-{% if @('app.dynamic') == 'yes' %}
+{% if @('app.build') == 'dynamic' %}
     volumes:
-{% if @('docker-compose.sync.strategy') == 'mutagen' %}
-      - {{ @('workspace.name') ~ '-sync:/app:nocopy' }}
-{% else %}
-      - ./:/app:{{ @('docker-compose.sync.native.options') }}
-{% endif %}
+      - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
       - ./.my127ws/application:/home/node/application
       - ./.my127ws/docker/image/node/root/lib/task:/lib/task
       - ./.my127ws:/.my127ws

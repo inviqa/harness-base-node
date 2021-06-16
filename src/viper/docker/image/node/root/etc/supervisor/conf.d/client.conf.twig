@@ -3,7 +3,7 @@ directory=/app
 stopasgroup=true
 killasgroup=true
 stopsignal=TERM
-{% if @('app.dynamic') == 'yes' %}
+{% if @('app.build') == 'dynamic' %}
 command=yarn workspace @inviqa/viper-app-client dev
 {% else %}
 command=yarn workspace @inviqa/viper-app-client start
