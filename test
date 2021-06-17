@@ -98,13 +98,13 @@ function restart_environment()
 function setup_dynamic_mountpoint()
 (
     cd "${path_test}"
-    echo "attribute('host.os'): linux" > workspace.override.yml
+    echo "attribute('host.os'): linux" >> workspace.override.yml
 )
 
 function setup_dynamic_mutagen()
 (
     cd "${path_test}"
-    echo "attribute('host.os'): darwin" > workspace.override.yml
+    echo "attribute('host.os'): darwin" >> workspace.override.yml
     echo "attribute('mutagen'): yes" >> workspace.override.yml
 )
 
