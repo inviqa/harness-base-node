@@ -96,7 +96,7 @@ attributes.default:
   framework:
     readme_blocks: []
 
-  frontend:
+  backend:
     path: /app
     watch: npm run watch
     build:
@@ -117,6 +117,12 @@ attributes.default:
             run rm -rf node_modules/
             run npm cache clean --force
           fi
+
+  frontend:
+    path: /app
+    build:
+      when: 'false'
+      steps: []
 
   git:
     default_branch: develop
