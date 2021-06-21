@@ -10,7 +10,6 @@
       context: ./
       dockerfile: .my127ws/docker/image/node/Dockerfile
 {% if @('app.build') == 'dynamic' %}
-    command: ["app", "start:dev"]
     stdin_open: true # react-scripts start terminates if stdin closed
     volumes:
       - {{ (syncvolume) ? @('workspace.name') ~ '-sync:/app:nocopy' : ('./:/app' ~ @('docker.compose.host_volume_options')) }}
