@@ -19,8 +19,9 @@ bootstrap()
 
 bootstrap
 
+
 if [ "${1:-}" == "sleep" ]; then
-    "$@"
+    exec /sbin/docker-init -- bash -c "$(printf "%q " "$@")"
 else
-    exec /sbin/docker-init su -- node -c "$(printf "%q " "${@:1}")"
+    exec /sbin/docker-init -- "$@"
 fi
