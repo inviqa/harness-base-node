@@ -14,20 +14,6 @@ command('enable'):
     set -- all
     source .my127ws/harness/scripts/enable.sh
 
-command('enable console'):
-  env:
-    USE_MUTAGEN:          = @('host.os') == 'darwin' and @('mutagen') == 'yes' ? 'yes':'no'
-    APP_BUILD:            = @('app.build')
-    APP_MODE:             = @('app.mode')
-    NAMESPACE:            = @('namespace')
-    HAS_ASSETS:           = @('aws.bucket') !== null and @('aws.bucket') !== '' ? 'yes':'no'
-    COMPOSE_PROJECT_NAME: = @('namespace')
-    COMPOSE_DOCKER_CLI_BUILD: = @('docker.buildkit.enabled') ? '1':'0'
-    DOCKER_BUILDKIT:          = @('docker.buildkit.enabled') ? '1':'0'
-  exec: |
-    #!bash(workspace:/)
-    set -- console
-    source .my127ws/harness/scripts/enable.sh
 
 command('disable'):
   env:
@@ -104,7 +90,7 @@ command('ps'):
     #!bash(workspace:/)|@
     docker-compose ps
 
-command('console'):
+command('node'):
   env:
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |

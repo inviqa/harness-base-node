@@ -2,7 +2,7 @@ attributes.default:
   app:
     # build - static|dynamic
     #   dynamic - volumes are mounted and the build step is run once the containers have started
-    #   static  - app is copied into console, built, then the resulting build is copied into the web image
+    #   static  - app is copied into node, built, then the resulting build is copied into the web image
     build: dynamic
 
     # mode - development|production
@@ -12,7 +12,7 @@ attributes.default:
     dist_path: /app/build
     node_web_port: 80
     services: []
-    
+
   delegated-volumes: no
   mutagen: yes
 

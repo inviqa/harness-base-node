@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+node_enabled()
+{
+    if [ "$APP_BUILD" = dynamic ]; then
+        [ -f .my127ws/.flag-node-built ]
+    else
+        [ -n "$(docker-compose ps --quiet node)" ]
+    fi
+}
 
 enable_all()
 {
@@ -15,13 +23,22 @@ enable_all()
         fi
     fi
 
+    if [ "$APP_BUILD" = dynamic ] && node_enabled && [ -z "$(docker-compose ps --quiet node)" ]; then
+        rm .my127ws/.flag-node-built
+    fi
+
     passthru ws networks external
 
     if [ "$IS_BUILT" = no ]; then
-        if [ "$HAS_FLAG" = no ]; then
-          passthru docker-compose down
-        fi
-        
+      if [ "$HAS_FLAG" = no ]; then
+          # remove all services, keeping node if considered built
+          if node_enabled; then
+              passthru "docker-compose ps --services | grep -v -Fxe node | xargs docker-compose rm --stop --"
+          else
+              passthru docker-compose down
+          fi
+      fi
+
         if [ "$HAS_ASSETS" = yes ]; then
             ws assets download
         fi
@@ -41,10 +58,37 @@ enable_all()
     fi
 }
 
+dynamic_node()
+{
+    # ensure node is started
+    if [ -z "$(docker-compose ps --quiet node)" ]; then
+        passthru docker-compose up -d node
+    fi
+
+    # we synchronise then stop mutagen to avoid impacting CPU usage during the build
+    if [ "$USE_MUTAGEN" = yes ]; then
+        passthru ws mutagen start
+        passthru ws mutagen pause
+    fi
+
+    find .my127ws/docker/image/ -type d ! -perm u+rwx,go+rx,o-w -exec chmod u+rwx,go+rx,o-w {} +
+
+    passthru docker-compose up --build -d node
+    passthru docker-compose exec -T -u node node app build
+
+    if [ "$USE_MUTAGEN" = yes ]; then
+        ws mutagen resume
+    fi
+
+    touch .my127ws/.flag-node-built
+}
+
 
 dynamic()
 {
     ws external-images pull
+
+    dynamic_node
 
     passthru "docker-compose config --services | xargs docker-compose build"
 }

@@ -28,7 +28,7 @@ prompt()
 {
     if [ "${RUN_CWD}" != "$(pwd)" ]; then
         RUN_CWD="$(pwd)"
-        echo -e "\\033[1m[\\033[0mdocker(console):$(pwd)\\033[1m]:\\033[0m" >&2
+        echo -e "\\033[1m[\\033[0mdocker(node):$(pwd)\\033[1m]:\\033[0m" >&2
     fi
 }
 
@@ -75,7 +75,7 @@ run()
               echo "Command failed. stderr:"
               cat /tmp/my127ws-stderr.txt
               echo "----------------------------------"
-              echo "Full logs are accessible in the console container at path :-"
+              echo "Full logs are accessible in the node container at path :-"
               echo "  stdout: /tmp/my127ws-stdout.txt"
               echo "  stderr: /tmp/my127ws-stderr.txt"
             fi
@@ -123,7 +123,7 @@ passthru()
 
 setCommandIndicator()
 {
-    echo -ne "\\033[1A" >&2 
+    echo -ne "\\033[1A" >&2
     echo -ne "\\033[$1" >&2
     echo -n "■" >&2
     echo -ne "\\033[0m" >&2
