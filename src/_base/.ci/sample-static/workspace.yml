@@ -1,0 +1,13 @@
+workspace('ci-node-sample-static'):
+  description: generated local workspace for ci-node-sample.
+  harness: inviqa/node
+
+attribute('app.build'): static
+
+attribute('aws.bucket'): null
+attribute('app.repository'): null
+attribute('aws.access_key_id'): null
+attribute('aws.secret_access_key'): null
+
+attribute('pipeline.base.istio.enabled'): true
+attribute('pipeline.base.ingress.annotations.example_istio'): test

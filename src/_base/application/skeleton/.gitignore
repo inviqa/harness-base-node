@@ -6,12 +6,17 @@
 /bin/
 /build
 /node_modules/
-
+/.docker-sync/
+/bin/
+/tools/assets/
+/vendor/
 
 # Files
 /.dockerignore
+/auth.json
 /.pnp.*
 /docker-compose.yml
+/docker-sync.yml
 /env.sh
 /mutagen.yml
 /mutagen.yml.lock

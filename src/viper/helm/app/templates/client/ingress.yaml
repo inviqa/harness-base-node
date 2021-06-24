@@ -1,10 +1,10 @@
-{{ if .Values.app.client.ingress.enabled }}
+{{ if .Values.client.ingress.enabled }}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-{{- if .Values.app.client.ingress.annotations }}
+{{- if .Values.client.ingress.annotations }}
   annotations:
-  {{- range $key, $value := .Values.app.client.ingress.annotations }}
+  {{- range $key, $value := .Values.client.ingress.annotations }}
     {{ $key }}: {{ $value | quote }}
   {{- end }}
 {{- end }}
@@ -12,14 +12,14 @@ metadata:
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.service: {{ .Values.app.resourcePrefix }}viper-client
-{{- if .Values.app.client.ingress.labels }}
-{{- toYaml .Values.app.client.ingress.labels | nindent 4 }}
+{{- if .Values.client.ingress.labels }}
+{{- toYaml .Values.client.ingress.labels | nindent 4 }}
 {{- end }}
   name: {{ .Values.app.resourcePrefix }}viper-client
 spec:
   rules:
-  {{- if .Values.app.client.ingress.hosts }}
-  {{- range $host := .Values.app.client.ingress.hosts }}
+  {{- if .Values.client.ingress.hosts }}
+  {{- range $host := .Values.client.ingress.hosts }}
     - host: {{ $host }}
       http:
         paths:

@@ -8,3 +8,4 @@ attribute('aws.bucket'): null
 attribute('app.repository'): null
 attribute('aws.id'): null
 attribute('aws.key'): null
+attribute('npm.repositories.inviqa.token'): = decrypt("YTozOntpOjA7czo3OiJkZWZhdWx0IjtpOjE7czoyNDoi+eyhoGuVPM5gO5p7wyiWA0l/FmgOc/sIIjtpOjI7czo1NjoiMr/adXKtAmtaibZDBmib3nZt/jCeytpvbdXv5qUK1Xw+OjmEXCoLQQVVAjDlbCG9+J2Y7HOFaK8iO30=")

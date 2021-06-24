@@ -10,7 +10,7 @@ harness('inviqa/viper'):
     attributes:
       secret:
         - npm.repositories.inviqa.token
-        - app.gateway.env.AUTH_TOKEN_SECRET
+        - gateway.env.AUTH_TOKEN_SECRET
 ---
 command('gateway rebuild'):
   env:
@@ -39,57 +39,69 @@ attributes:
     repositories:
       inviqa:
         host: npm.pkg.github.com
-        # token: ~
+        token: ~
+
   app:
     image_pull_config: null
-    image: = @('docker.repository') ~ @('app.version')
-    build:
-      from: = 'node:' ~ @('node.version') ~ '-slim'
-      steps:
-      - run yarn install
-      - run yarn generate:types
-      - run yarn build:deps
-      - |
-        if [ "$APP_DYNAMIC" == "no" ]; then
-          run yarn run --cwd=app/client build:storybook
-        fi
+    image: = @('docker.repository') ~ ':' ~ @('app.version')
     resourcePrefix: ''
-    gateway:
-      build:
-        steps:
-        - run yarn build:app:gateway
-      port: 4000
-      resources:
-        memory: 512Mi
-      env:
-        SUPERVISOR_START_GATEWAY: "true"
-        GATEWAY_HOST: = 'gateway-' ~ @('hostname')
-        # AUTH_TOKEN_SECRET: ~
-      secrets: ~
-      ingress:
-        enabled: true
-        hosts:
-          - = 'gateway-' ~ @('hostname')
-    client:
-      image: 
-      build:
-        steps:
+    services: []
+
+  backend:
+    path: /app
+    build:
+      when: -f "package.json"
+      steps:
+        - passthru yarn install
+        - passthru yarn generate:types
+        - passthru yarn build:deps
         - |
-          if [ "$APP_DYNAMIC" == "no" ]; then
+          if [ "$APP_BUILD" = static ]; then
+            passthru yarn run --cwd=app/client build:storybook
+          fi
+
+  gateway:
+    path: /app
+    build:
+      when: -f "/app/gateway/package.json"
+      steps:
+        - run yarn build:app:gateway
+    port: 4000
+    resources:
+      memory: 512Mi
+    env:
+      SUPERVISOR_START_GATEWAY: "true"
+      GATEWAY_HOST: = 'gateway-' ~ @('hostname')
+      AUTH_TOKEN_SECRET: ~
+    secrets: ~
+    ingress:
+      enabled: true
+      hosts:
+        - = 'gateway-' ~ @('hostname')
+
+  client:
+    path: /app
+    image:
+    build:
+      when: -f "/app/client/package.json"
+      steps:
+        - |
+          if [ "$APP_BUILD" = dynamic ]; then
             run yarn build:app:client
           fi
-      port: 3000
-      resources:
-        memory: 1024Mi
-      env:
-        SUPERVISOR_START_CLIENT: "true"
-        GATEWAY_SSR_URL: http://localhost:4000/graphql
-        CLIENT_HOST: = @('hostname')
-      secrets: ~
-      ingress:
-        enabled: true
-        hosts:
-          - = @('hostname')
+    port: 3000
+    resources:
+      memory: 1024Mi
+    env:
+      SUPERVISOR_START_CLIENT: "true"
+      GATEWAY_SSR_URL: http://localhost:4000/graphql
+      CLIENT_HOST: = @('hostname')
+    secrets: ~
+    ingress:
+      enabled: true
+      hosts:
+        - = @('hostname')
+
   service: {}
   environment:
     preview:

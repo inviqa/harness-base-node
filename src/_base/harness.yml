@@ -7,10 +7,6 @@ harness('inviqa/node'):
     confd:
       - harness:/
 ---
-attributes:
-  app:
-    dist_path: /app/build
----
 import:
   - harness/config/*.yml
   - harness/attributes/*.yml

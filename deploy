@@ -3,7 +3,7 @@
 set -e
 set -x
 
-HARNESSES=(viper)
+HARNESSES=(node-spa viper)
 
 function main()
 {

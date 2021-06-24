@@ -1,9 +1,11 @@
-{{- if .Values.prometheus.podMonitoring -}}
+{{- if and .Values.services.nginx.enabled .Values.prometheus.podMonitoring -}}
 apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: {{ .Values.resourcePrefix }}nginx
   labels:
+    {{- include "chart.labels" $ | nindent 4 }}
+    app.kubernetes.io/component: nginx
     app.service: {{ .Values.resourcePrefix }}nginx
 spec:
   selector:

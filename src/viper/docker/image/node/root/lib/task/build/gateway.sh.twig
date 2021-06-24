@@ -2,7 +2,13 @@
 
 function task_build_gateway()
 {
-    {% for step in @('app.gateway.build.steps') -%}
+    cd {{ @('gateway.path') }}
+
+    if [ ! {{ @('gateway.build.when')|raw }} ]; then
+        return 0;
+    fi
+    
+    {% for step in @('gateway.build.steps') -%}
     {{ step|raw }}
     {% endfor %}
 

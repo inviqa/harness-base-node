@@ -8,7 +8,7 @@ spec:
   ports:
   - name: http
     port: 80
-    targetPort: {{ .Values.app.gateway.port }}
+    targetPort: {{ .Values.gateway.port }}
   selector:
     app.service: {{ .Values.resourcePrefix }}viper-gateway
 status:

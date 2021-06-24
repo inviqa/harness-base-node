@@ -1,0 +1,61 @@
+attributes:
+  services:
+    node:
+      enabled: true
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-node'
+      publish: true
+      build:
+        environment: {}
+      environment:
+        HOST_OS_FAMILY: = @('host.os')
+        APP_NAME: = @('workspace.name')
+        APP_HOST: = @('hostname')
+    lighthouse:
+      enabled: "= 'lighthouse' in @('app.services')"
+    chrome:
+      enabled: "= 'chrome' in @('app.services')"
+    nginx:
+      enabled: "= 'nginx' in @('app.services')"
+      image: = @('docker.repository') ~ ':' ~ @('app.version') ~ '-nginx'
+      publish: true
+      resources:
+        memory: "100Mi"
+  pipeline:
+    base:
+      prometheus:
+        podMonitoring: false
+      services:
+        node:
+          environment:
+            APP_HOST: = @('pipeline.base.hostname')
+      ingress:
+        annotations: {}
+        target_service: "= @('services.nginx.enabled') ? 'nginx' : 'node'"
+        # standard or istio
+        type: standard
+      istio:
+        gateways:
+          - "istio-system/{{ .Release.Namespace }}-gateway"
+        additionalGateways: []
+    production:
+      # assumption is that in a production style environment these would be
+      # managed services outside of the applications control
+      services:
+    qa:
+      services:
+        node:
+          enabled: true
+          environment:
+            APP_HOST: = @('pipeline.qa.hostname')
+            SMTP_HOST: = @('pipeline.qa.smtp.host')
+            SMTP_PORT: = @('pipeline.qa.smtp.port')
+    preview:
+      services:
+        nginx:
+          resources:
+            memory: "64Mi"
+        node:
+          enabled: true
+          environment:
+            SMTP_HOST: = @('pipeline.preview.smtp.host')
+            SMTP_PORT: = @('pipeline.preview.smtp.port')

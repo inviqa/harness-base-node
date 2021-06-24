@@ -1,0 +1,5 @@
+---
+attributes:
+  services:
+    nginx:
+      enabled: = @('app.build') == 'static'
