@@ -52,12 +52,12 @@ attributes:
     build:
       when: -f "package.json"
       steps:
-        - run yarn install
-        - run yarn generate:types
-        # - run yarn build:deps
+        - passthru yarn install
+        - passthru yarn generate:types
+        - passthru yarn build:deps
         - |
           if [ "$APP_BUILD" = static ]; then
-            run yarn run --cwd=app/client build:storybook
+            passthru yarn run --cwd=app/client build:storybook
           fi
 
   gateway:
