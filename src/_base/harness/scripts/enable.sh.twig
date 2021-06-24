@@ -56,9 +56,12 @@ enable_all()
 
 dynamic_node()
 {
-    # ensure node is started
-    if [ -z "$(docker-compose ps --quiet node)" ]; then
-        passthru docker-compose up -d node
+    if node_enabled; then
+      # ensure node is started
+      if [ -z "$(docker-compose ps --quiet node)" ]; then
+          passthru docker-compose up -d node
+      fi
+      return;
     fi
 
     # we synchronise then stop mutagen to avoid impacting CPU usage during the build
