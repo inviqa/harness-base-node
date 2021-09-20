@@ -27,9 +27,10 @@ spec:
               serviceName: {{ $.Values.app.resourcePrefix }}viper-client
               servicePort: 80
   {{- end -}}
-  {{- end }}  {{- if .Values.app.gateway.ingress.tls }}
+  {{- end }}
+  {{- if .Values.app.client.ingress.tls }}
   tls:
-  {{- toYaml .Values.app.gateway.ingress.tls | nindent 4 }}
+  {{- toYaml .Values.app.client.ingress.tls | nindent 4 }}
   {{- end }}
 status:
   loadBalancer: {}
