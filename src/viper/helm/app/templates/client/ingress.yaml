@@ -26,7 +26,9 @@ spec:
     - host: {{ $host }}
       http:
         paths:
-          - backend:
+          - path: /
+            pathType: Prefix
+            backend:
               service:
                 name: {{ $.Values.app.resourcePrefix }}viper-client
                 port:
