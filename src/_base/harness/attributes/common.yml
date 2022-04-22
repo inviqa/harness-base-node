@@ -3,6 +3,7 @@ attributes.default:
   domain: my127.site
   
   hostname: = @('namespace') ~ '.' ~ @('domain')
+  hostname_aliases: []
 
   node:
     version: 14
