@@ -18,6 +18,7 @@ attributes:
 
   app:
     dist_path: /app/build
+    node_web_port: 3000
 
   backend:
     path: /app
