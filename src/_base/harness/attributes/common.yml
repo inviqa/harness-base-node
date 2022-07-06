@@ -19,17 +19,16 @@ attributes.default:
   pipeline:
     secrets:
       MY127WS_KEY: = @('workspace.name') ~ '-my127ws-key'
-    stage:
-      publish:
+    publish:
+      enabled: no
+      services: = publishable_services(@('services'))
+      chart:
         enabled: no
-        services: = publishable_services(@('services'))
-        chart:
-          enabled: no
-          git:
-            ssh_private_key: ~
-            repository: ~
-            path: = 'build-artifacts/' ~ @('workspace.name')
-            email: name@example.com
+        git:
+          ssh_private_key: ~
+          repository: ~
+          path: = 'build-artifacts/' ~ @('workspace.name')
+          email: name@example.com
 
   docker:
     registry:
