@@ -9,8 +9,8 @@ networks:
   private:
     external: false
   shared:
-    external:
-      name: my127ws
+    external: true
+    name: my127ws
 {% if @('docker-compose.sync.strategy') == 'mutagen' %}
 volumes:
 {% for volume in get_mutagen_volume_names() %}
