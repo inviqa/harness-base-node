@@ -1,18 +1,20 @@
 command('app build'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     ws external-images pull
-    passthru docker-compose build node
+    passthru $COMPOSE_BIN build node
 
 command('app publish'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
     echo "@('docker.registry.password')" | run docker login --username="@('docker.registry.username')" --password-stdin @('docker.registry.url')
-    run docker-compose push @('pipeline.publish.services')
+    run $COMPOSE_BIN push @('pipeline.publish.services')
     run docker logout @('docker.registry.url')
 
 command('app publish chart <release> <message>'):
@@ -24,19 +26,19 @@ command('app publish chart <release> <message>'):
     USER_EMAIL: = @('pipeline.publish.chart.git.email')
   exec: |
     #!bash(workspace:/)|@
-    
+
     run rm -rf build-artifacts-repository
     echo "${SSH_PRIVATE_KEY}" | base64 -d > id_rsa
     chmod 0600 id_rsa
 
     export GIT_SSH_COMMAND='ssh -i ./id_rsa -o "IdentitiesOnly yes" -F /dev/null -o StrictHostKeyChecking=no'
-    
+
     run git clone $REPOSITORY ./build-artifacts-repository
     run git -C ./build-artifacts-repository config user.email "${USER_EMAIL}"
 
     run mkdir -p $ARTIFACTS_PATH
     run rsync --exclude='*.twig' --exclude='_twig' --delete -a .my127ws/helm/app/ ${ARTIFACTS_PATH}/
-    
+
     export GIT_SSH_COMMAND='ssh -i ../id_rsa -o "IdentitiesOnly yes" -F /dev/null -o StrictHostKeyChecking=no'
     run git -C ./build-artifacts-repository add .
     run git -C ./build-artifacts-repository commit --allow-empty -m \"${MESSAGE}\"
@@ -71,7 +73,7 @@ command('helm kubeval <chart-path>'):
       passthru helm init --client-only
     fi
     passthru helm dependency build
-    
+
     if readlink "${HELM_HOME:-$HOME}/.helm/plugins/helm-kubeval" | grep '/https-github.com-instrumenta-helm-kubeval$' >/dev/null; then
       passthru helm plugin remove kubeval
     fi

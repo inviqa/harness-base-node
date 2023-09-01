@@ -21,18 +21,20 @@ command('gateway rebuild'):
     run ws gateway restart
 command('gateway <action>'):
   env:
+    COMPOSE_BIN: = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
     ACTION: = input.argument('action')
   exec: |
     #!bash(workspace:/)
-    passthru docker-compose exec node supervisorctl "${ACTION}" "gateway"
+    passthru $COMPOSE_BIN exec node supervisorctl "${ACTION}" "gateway"
 command('client <action>'):
   env:
+    COMPOSE_BIN: = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
     ACTION: = input.argument('action')
   exec: |
     #!bash(workspace:/)
-    passthru docker-compose exec node supervisorctl "${ACTION}" "client"
+    passthru $COMPOSE_BIN exec node supervisorctl "${ACTION}" "client"
 ---
 attributes:
   npm:

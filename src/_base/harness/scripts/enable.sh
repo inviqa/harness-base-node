@@ -6,7 +6,7 @@ main()
 
     if [ ! -f .my127ws/.flag-built ]; then
 
-        passthru docker-compose down
+        passthru $COMPOSE_BIN down
 
         if [[ "$APP_DYNAMIC" = "yes" ]]; then
             dynamic
@@ -17,8 +17,8 @@ main()
         touch .my127ws/.flag-built
 
     else
-        passthru docker-compose up -d
-        passthru docker-compose exec -T -u node node app welcome
+        passthru $COMPOSE_BIN up -d
+        passthru $COMPOSE_BIN exec -T -u node node app welcome
     fi
 
     if [[ "$APP_DYNAMIC" = "yes" && "$SYNC_STRATEGY" = "mutagen" ]]; then
@@ -37,21 +37,21 @@ dynamic()
     fi
 
     ws external-images pull
-    
-    passthru docker-compose build
-    passthru docker-compose up -d
+
+    passthru $COMPOSE_BIN build
+    passthru $COMPOSE_BIN up -d
 
     if [ ! -f package.json ]; then
         task skeleton:apply
     fi
-    
-    passthru docker-compose exec -T node app init
+
+    passthru $COMPOSE_BIN exec -T node app init
 }
 
 static()
 {
     ws app build
-    passthru docker-compose up -d
+    passthru $COMPOSE_BIN up -d
 }
 
 main

@@ -5,6 +5,7 @@ command('enable'):
     APP_DEVELOPMENT:      = @('app.development')
     APP_DYNAMIC:          = @('app.dynamic')
     NAMESPACE:            = @('namespace')
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)
@@ -14,6 +15,7 @@ command('disable'):
   env:
     SYNC_STRATEGY:        = @('docker-compose.sync.strategy')
     NAMESPACE:            = @('namespace')
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)
@@ -27,6 +29,7 @@ command('destroy'):
     APP_VERSION:          = @('app.version')
     DOCKER_REPOSITORY:    = @('docker.repository')
     SYNC_STRATEGY:        = @('docker-compose.sync.strategy')
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
@@ -45,53 +48,58 @@ command('networks external'):
 
 command('yarn %'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|=
     if [ -t 0 ] && [ -t 1 ] ; then
-      docker-compose exec -u node node yarn ={ input.argument('%') }
+      $COMPOSE_BIN exec -u node node yarn ={ input.argument('%') }
     else
-      docker-compose exec -T -u node node yarn ={ input.argument('%') }
+      $COMPOSE_BIN exec -T -u node node yarn ={ input.argument('%') }
     fi
 
 command('exec %'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|=
     if [ -t 0 ] && [ -t 1 ] ; then
-      docker-compose exec -u node node ={ input.argument('%') }
+      $COMPOSE_BIN exec -u node node ={ input.argument('%') }
     else
-      docker-compose exec -T -u node node ={ input.argument('%') }
+      $COMPOSE_BIN exec -T -u node node ={ input.argument('%') }
     fi
 
 command('console'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
-    passthru docker-compose exec -u node node bash
+    passthru $COMPOSE_BIN exec -u node node bash
 
 command('logs %'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(harness:/)|=
-    docker-compose logs ={input.argument('%')}
+    $COMPOSE_BIN logs ={input.argument('%')}
 
 command('ps'):
   env:
+    COMPOSE_BIN:          = @('docker.compose.bin')
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|@
-    docker-compose ps
+    $COMPOSE_BIN ps
 
 command('port <service>'):
   env:
     COMPOSE_PROJECT_NAME: = @('namespace')
   exec: |
     #!bash(workspace:/)|=
-    passthru docker port $(docker-compose ps -q ={input.argument('service')})
+    passthru docker port $($COMPOSE_BIN ps -q ={input.argument('service')})
 
 command('set <attribute> <value>'):
   env:

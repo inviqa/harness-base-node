@@ -3,8 +3,12 @@ after('harness.install'): |
   #!bash
   ws enable
 
-after('harness.refresh'): |
-  #!bash(harness:/)|@
-  run docker-compose -p @('namespace') stop
-  run docker-compose -p @('namespace') pull
-  run docker-compose -p @('namespace') up -d --build
+after('harness.refresh'):
+  env:
+    COMPOSE_BIN: = @('docker.compose.bin')
+    COMPOSE_PROJECT: = @('namespace')
+  exec: |
+    #!bash(workspace:/)|@
+    run $COMPOSE_BIN stop
+    ws external-images pull
+    run $COMPOSE_BIN up -d --build

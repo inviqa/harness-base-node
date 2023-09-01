@@ -11,20 +11,20 @@ Please follow the below steps to get started, if you encounter any issues instal
 
 ##### General
 
-- Access to LastPass folders
-  - `Shared-{{ @('workspace.name') }}-Servers` and `Shared-{{ @('workspace.name') }}-Accounts`
+- Access to 1Password vaults
+  - `Project: {{ @('workspace.name') }} - Infrastructure` and `Project: {{ @('workspace.name') }} - Pipeline`
 
 ##### Docker
 
 - A working Docker setup
   - On MacOS, use [Docker for Mac](https://docs.docker.com/docker-for-mac/install/).
   - On Linux, add the official Docker repository and install the "docker-ce" package.
-    You will also need to have a recent [docker-compose](https://docs.docker.com/compose/install/) version - at least `1.24.0`.
+    You will also need to have a recent [docker compose](https://docs.docker.com/compose/install/) version - at least `1.24.0`.
 
 #### Setup
 
 1. Install [workspace](https://github.com/my127/workspace)
-2. Copy the LastPass entry "{{ @('workspace.name') }}: Development Environment Key" to a new blank file named `workspace.override.yml` in the project root.
+2. Copy the 1Password entry "{{ @('workspace.name') }} - DEV - Development Environment Key" to a new blank file named `workspace.override.yml` in the project root.
 3. Run `ws install`
 
 Once installed, the site should be available at [https://{{ @('hostname') }}](https://{{ @('hostname') }}).
