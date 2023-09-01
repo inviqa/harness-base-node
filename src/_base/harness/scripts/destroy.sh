@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-run docker-compose down --rmi local --volumes --remove-orphans
+run $COMPOSE_BIN down --rmi local --volumes --remove-orphans
 
 if [[ "$SYNC_STRATEGY" = "mutagen" ]]; then
   run ws mutagen stop

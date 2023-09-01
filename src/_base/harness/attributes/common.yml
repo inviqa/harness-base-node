@@ -1,7 +1,7 @@
 attributes.default:
 
   domain: my127.site
-  
+
   hostname: = @('namespace') ~ '.' ~ @('domain')
   hostname_aliases: []
 
@@ -31,6 +31,8 @@ attributes.default:
           email: name@example.com
 
   docker:
+    compose:
+      bin: docker-compose
     registry:
       url: ~
       username: ~
