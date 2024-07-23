@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function task_init()
+{
+    task assets:apply
+
+    {% for step in @('backend.init.steps') -%}
+    {{ step }}
+    {% endfor %}
+
+    task welcome
+}
