@@ -38,10 +38,6 @@ function main()
             archive "$harness"
         fi
     done
-
-    if [ "$ARCHIVE" -gt 0 ]; then
-        archive "php"
-    fi
 }
 
 function build()
