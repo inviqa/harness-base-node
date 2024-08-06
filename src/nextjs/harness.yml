@@ -1,0 +1,37 @@
+harness('inviqa/nextjs'):
+  description: A docker based development environment for NextJS
+  parentLayers:
+    - inviqa/docker:v0.4.0
+  require:
+    services:
+      - proxy
+    confd:
+      - harness:/
+---
+attributes:
+  node:
+    packageManager: npm
+    version: '20'
+  services:
+    console:
+      build:
+        from: = 'node:' ~ @('node.version') ~ '-slim'
+        args: {}
+      publish: false
+    nginx:
+      enabled: true
+      config:
+        proxy_pass: http://nextjs:3000
+    relay:
+      enabled: false
+    nextjs:
+      enabled: true
+      build:
+        args: {} # NEXT_PUBLIC variables supported for build
+      environment: {} # no NEXT_PUBLIC variables supported for runtime
+      environment_secrets: {}
+---
+import:
+  - harness/config/*.yml
+  - harness/attributes/*.yml
+  - harness/attributes/environment/={env('MY127WS_ENV','local')}.yml

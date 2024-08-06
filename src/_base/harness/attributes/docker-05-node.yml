@@ -1,0 +1,13 @@
+attributes.default:
+  services:
+    console:
+      build:
+        args: {}
+          # NPM_USER: = @('npm.registry.username')
+          # NPM_PASS: = @('npm.registry.password')
+          # NPM_EMAIL: = @('npm.registry.email')
+          # NPM_REGISTRY: = @('npm.registry.url')
+          # NPM_SCOPE: = @('npm.registry.scope')
+    nginx:
+      config:
+        proxy_pass: https://app:3000

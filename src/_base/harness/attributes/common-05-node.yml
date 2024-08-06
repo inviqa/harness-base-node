@@ -1,0 +1,26 @@
+attributes.default:
+  app:
+    code_owner: node
+
+  node:
+    packageManager: yarn
+    version: '20'
+  
+  npm:
+    login: false
+    registry:
+      username: ~
+      password: ~
+      email: ~
+      scope: ~
+      url: ~
+
+  task:
+    build:
+      when: "[ -f package.json ]"
+      steps:
+        - "= @('npm.login') ? 'npm-cli-login' : ''"
+        - "= @('node.packageManager') == 'yarn' ? 'yarn install --frozen-lockfile' : ''"
+        - "= @('node.packageManager') == 'yarn' ? 'yarn cache clean --all' : ''"
+        - "= @('node.packageManager') == 'npm' ? 'npm clean-install' : ''"
+        - "= @('node.packageManager') == 'npm' ? 'npm cache clean --force' : ''"

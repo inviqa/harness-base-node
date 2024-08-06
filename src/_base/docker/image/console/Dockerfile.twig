@@ -1,0 +1,60 @@
+FROM {{ @('services.console.build.from') }} AS console
+
+ENV CODE_OWNER={{ @('app.code_owner') }}
+ENV CODE_OWNER_GROUP={{ @('app.code_owner') }}
+
+USER root
+
+COPY .my127ws/docker/image/console/root /
+
+RUN (getent group "${CODE_OWNER_GROUP}" >/dev/null 2>&1 || groupadd "${CODE_OWNER_GROUP}") \
+ && (getent passwd "${CODE_OWNER}" >/dev/null 2>&1 || useradd --gid "${CODE_OWNER_GROUP}" --home-dir '{{ @('app.code_owner_home') }}' "${CODE_OWNER}") \
+ && mkdir -p /app \
+ && chown -R "${CODE_OWNER}:${CODE_OWNER_GROUP}" /app \
+ && apt-get update && apt-get install --no-install-recommends -y ca-certificates curl rsync \
+ && apt-get auto-remove -qq -y \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* \
+ && ([ -e /sbin/tini ] || curl --fail --silent --show-error --location --output /sbin/tini "https://github.com/krallin/tini/releases/download/v0.19.0/tini-$(dpkg --print-architecture)") \
+ && chmod +x /sbin/tini
+
+{% set exta_build_args=@('services.console.build.args')|filter(v => v is not empty) %}
+{% if exta_build_args %}
+{% for name, value in exta_build_args %}
+ARG {{ name }}
+{% endfor %}
+{% endif %}
+
+ENV APP_MODE={{ @('app.mode') }} \
+  APP_BUILD={{ @('app.build') }} \
+  ASSETS_DIR={{ @('assets.local') }}
+{%- set extra_environment_variables=@('services.console.build.environment')|filter(v => v is not empty) %}
+{%- if extra_environment_variables %}
+{%- for name, value in extra_environment_variables %} \
+  {{ name }}="{{ value }}"
+{%- endfor %}
+{% endif %}
+
+{% if @('npm.login') %}
+RUN npm install -g npm-cli-login
+{% endif %}
+
+USER {{ @('app.code_owner')}}
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/docker/image/console/home {{ @('app.code_owner_home')}}
+
+{% if @('app.build') == 'static' %}
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} .my127ws/application  {{ @('app.code_owner_home')}}/application
+COPY --chown={{ @('app.code_owner')}}:{{ @('app.code_owner_group')}} ./                    /app
+RUN SIDEKICK_VERBOSE=yes app build
+{% else %}
+VOLUME /app
+VOLUME {{ @('app.code_owner_home')}}/application
+{% endif %}
+
+WORKDIR /app
+
+USER root
+
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["sleep", "infinity"]

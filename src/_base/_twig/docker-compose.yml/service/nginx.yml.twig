@@ -1,0 +1,28 @@
+{% set hostnames = [@('hostname')] %}
+{% set hostnames = hostnames|merge(@('hostname_aliases')|map(alias => "#{alias}." ~ @('domain'))) %}
+{% set traefikRules = hostnames|map(hostname => "Host(`" ~ hostname ~ "`)") %}
+services:
+  nginx:
+    image: nginx:1.25-alpine
+    labels:
+      # Traefik 1, deprecated
+      - traefik.backend={{ @('workspace.name') }}-nginx
+      - traefik.frontend.rule=Host:{{ hostnames|join(',') }}
+      - traefik.docker.network=my127ws
+      - traefik.port=80
+      # Traefik 2
+      - traefik.enable=true
+      # - traefik.docker.network=my127ws
+      - traefik.http.routers.{{ @('workspace.name') }}-nginx.rule={{ traefikRules | join(' || ') }}
+      - traefik.http.services.{{ @('workspace.name') }}-nginx.loadbalancer.server.port=80
+    volumes:
+      - .my127ws/docker/image/nginx/root/etc/nginx/conf.d:/etc/nginx/conf.d:ro
+      - .my127ws/docker/image/nginx/root/etc/ssl/certs/app.crt:/etc/ssl/certs/app.crt:ro
+      - .my127ws/docker/image/nginx/root/etc/ssl/private/app.key:/etc/ssl/private/app.key:ro
+    networks:
+      private:
+        aliases:
+{% for alias in hostnames %}
+          - {{ alias }}
+{% endfor %}
+      shared: {}

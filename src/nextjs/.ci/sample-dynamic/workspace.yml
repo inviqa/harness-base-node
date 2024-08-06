@@ -1,0 +1,7 @@
+workspace('ci-nextjs-sample-dynamic'):
+  description: generated local workspace for ci-nextjs-sample.
+  harnessLayers:
+    - https://github.com/inviqa/harness-docker/archive/refs/tags/0.4.0-alpha2.tar.gz
+    # - inviqa/nextjs # installed by test
+
+attribute('docker.port_forward.enabled'): false

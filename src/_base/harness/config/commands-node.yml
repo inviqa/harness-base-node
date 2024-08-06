@@ -1,0 +1,31 @@
+command('install host'):
+  env:
+    NODE_PACKAGE_MANAGER: = @('node.packageManager')
+    NPM_LOGIN: "= @('npm.login') ? 'yes' : 'no'"
+  exec: |
+    #!bash
+    ws harness download
+    ws harness prepare
+    ws set app.build host
+    ws harness prepare
+
+    if [ "$NPM_LOGIN" = yes ]; then
+      ws npm login
+    fi
+    "${NODE_PACKAGE_MANAGER}" install
+
+command('npm login'):
+  env:
+    NPM_USER: = @('npm.registry.username')
+    NPM_PASS: = @('npm.registry.password')
+    NPM_EMAIL: = @('npm.registry.email')
+    NPM_REGISTRY: = @('npm.registry.url')
+    NPM_SCOPE: = @('npm.registry.scope')
+  exec: |
+    #!bash
+    if command -v npm-cli-login >/dev/null; then
+      npm-cli-login
+    else
+      echo "warning: npm-cli-login needs to be installed globally (npm install -g npm-cli-login) to login"  >&2
+      exit 1
+    fi

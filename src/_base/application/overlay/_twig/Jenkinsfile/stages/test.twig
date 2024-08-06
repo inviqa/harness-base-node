@@ -1,0 +1,24 @@
+        stage('Test')  {
+            parallel {
+{% if not @('jenkins.tests.isolated') %}
+{% if @('services.lighthouse.enabled') %}
+                stage('lighthouse') { 
+                    steps { sh 'ws lighthouse' } 
+                    post { failure { script { failureMessages << 'Lighthouse tests' } } }
+                }
+{% endif %}
+{% endif %}
+                stage('test:quality')  { 
+                    steps { sh 'ws exec {{ @('node.packageManager') }} run test:quality' }
+                    post { failure { script { failureMessages << 'Quality checks' } } }
+                }
+                stage('test:unit')  { 
+                    steps { sh 'ws exec {{ @('node.packageManager') }} run test:unit' }
+                    post { failure { script { failureMessages << 'Unit tests' } } }
+                }
+                stage('helm kubeval app')  { 
+                    steps { sh 'ws helm kubeval --cleanup app' }
+                    post { failure { script { failureMessages << 'Helm chart rendering' } } }
+                }
+            }
+        }
