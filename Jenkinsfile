@@ -31,7 +31,7 @@ pipeline {
         }
         stage('Build and Test') {
             parallel {
-                stage('1. NextJS') {
+                stage('1. NextJS, Alokai') {
                     agent {
                         docker {
                             // Reuse the same agent selected at the top of the file
@@ -60,12 +60,15 @@ pipeline {
                             }
                             steps {
                                 sh './test nextjs dynamic mutagen'
+                                sh './test alokai dynamic mutagen'
 
                                 sh './test nextjs static'
+                                sh './test alokai static'
 
                                 sh './test nextjs dynamic'
+                                sh './test alokai dynamic'
                             }
-                            post { failure { script { failureMessages << 'NextJS quality checks' } } }
+                            post { failure { script { failureMessages << 'NextJS and Alokai quality checks' } } }
                         }
                         stage('Acceptance Tests') {
                             environment {
