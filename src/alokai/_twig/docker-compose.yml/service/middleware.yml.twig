@@ -1,0 +1,22 @@
+services:
+  middleware:
+{% if @('app.build' == 'static') %}  
+    build:
+      context: ./
+      dockerfile: .vuestorefrontcloud/docker/middleware/Dockerfile-middleware
+      args: {{ to_nice_yaml(@('services.middleware.build.args'), 2, 8) }}
+{% else %}
+    extends: console
+    working_dir: /app/apps/storefront-middleware
+    command: [ {{ @('node.packageManager') | json_encode }}, run, dev ]
+{% endif %}
+    labels:
+      # Traefik 1, deprecated
+      - traefik.enable=false
+    environment: {{ to_nice_yaml(deep_merge([
+        @('services.middleware.environment'),
+        @('services.middleware.environment_dynamic'),
+        @('services.middleware.environment_secrets')
+      ]), 2, 6) }}
+    networks:
+      - private
