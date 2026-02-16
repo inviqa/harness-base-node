@@ -13,7 +13,7 @@ attributes:
     managedDotEnv: "= @('app.build') == 'host'"
   node:
     packageManager: npm
-    version: "20"
+    version: "24"
   services:
     console:
       build:

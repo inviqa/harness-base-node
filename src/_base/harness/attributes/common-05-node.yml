@@ -4,8 +4,8 @@ attributes.default:
 
   node:
     packageManager: yarn
-    version: '20'
-  
+    version: "24"
+
   npm:
     login: false
     registry:
