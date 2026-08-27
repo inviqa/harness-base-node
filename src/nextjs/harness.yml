@@ -11,7 +11,8 @@ harness('inviqa/nextjs'):
 attributes:
   node:
     packageManager: npm
-    version: '20'
+    version: "20"
+    managedDotEnv: "= @('app.build') == 'host'"
   services:
     console:
       build:
