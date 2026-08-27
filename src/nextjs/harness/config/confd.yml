@@ -35,4 +35,4 @@ confd('harness:/'):
   - { src: docker/image/nginx/root/etc/ssl/certs/app.crt }
   - { src: docker/image/nginx/root/etc/ssl/private/app.key }
   # node/nextjs templates
-  - { src: _twig/nextjs.env, dst: workspace:/.env }
+  - { src: _twig/nextjs.env, dst: workspace:/.env, when: "@('app.build') == 'host'" }
