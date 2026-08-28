@@ -41,5 +41,5 @@ confd('harness:/'):
   - {
       src: _twig/nextjs.env,
       dst: workspace:/.env,
-      when: "@('node.managedDotEnv')",
+      when: "@('app.managedDotEnv')",
     }
