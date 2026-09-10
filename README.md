@@ -10,6 +10,7 @@ Each framework will fully override a base harness file if differing behaviour is
 ## Available Frameworks
 
 - [NextJs](src/nextjs/)
+- [Alokai](src/alokai/)
 
 ## Features of each harness
 
@@ -185,4 +186,5 @@ When you're ready to release:
 
 [Workspace]: https://github.com/my127/workspace
 [inviqa/harness-nextjs]: https://github.com/inviqa/harness-base-node/tree/main/src/nextjs
+[inviqa/harness-alokai]: https://github.com/inviqa/harness-base-node/tree/main/src/alokai
 [my127/my127.io]: https://github.com/my127/my127.io

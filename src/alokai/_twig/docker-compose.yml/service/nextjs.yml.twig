@@ -1,0 +1,26 @@
+services:
+  nextjs:
+{% if @('app.build' == 'static') %}  
+    build:
+      context: ./
+      dockerfile: .vuestorefrontcloud/docker/nextjs/Dockerfile-frontend
+      args: {{ to_nice_yaml(deep_merge([
+          @('services.nextjs.build.args'),
+          @('services.nextjs.environment')
+        ]), 2, 8) }}
+{% else %}
+    extends: console
+    working_dir: /app/apps/storefront-unified-nextjs
+    command: [ {{ @('node.packageManager') | json_encode }}, run, dev ]
+{% endif %}
+    labels:
+      # Traefik 1, deprecated
+      - traefik.enable=false
+    environment: {{ to_nice_yaml(deep_merge([
+        @('app.build') == 'dynamic' ? @('services.nextjs.build.args') : [],
+        @('services.nextjs.environment'),
+        @('services.nextjs.environment_dynamic'),
+        @('services.nextjs.environment_secrets')
+      ]), 2, 6) }}
+    networks:
+      - private

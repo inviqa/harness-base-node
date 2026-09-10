@@ -9,7 +9,7 @@ $0 [--archive]
 EOF
 }
 
-HARNESSES=(nextjs)
+HARNESSES=(nextjs alokai)
 ARCHIVE=0
 ARGS=()
 
