@@ -3,7 +3,7 @@
 {% set traefikRules = hostnames|map(hostname => "Host(`" ~ hostname ~ "`)") %}
 services:
   nginx:
-    image: nginx:1.25-alpine
+    image: nginx:1.31-alpine
     labels:
       # Traefik 1, deprecated
       - traefik.backend={{ @('workspace.name') }}-nginx
