@@ -9,5 +9,6 @@ attributes.default:
           # NPM_REGISTRY: = @('npm.registry.url')
           # NPM_SCOPE: = @('npm.registry.scope')
     nginx:
+      image: nginx:1.31-alpine
       config:
         proxy_pass: https://app:3000
